@@ -1,8 +1,17 @@
 // ======================== TRANSACTIONS PAGE ========================
 import { auth } from '../firebase/auth.js';
-import { getUserIncomes, getUserExpenses, addUserIncome, addUserExpense, deleteIncome, deleteExpense } from '../api/mymoney.js';
+import { 
+    getUserIncomesFromCache, 
+    getUserExpensesFromCache,
+    addIncomeAndUpdateCache,
+    addExpenseAndUpdateCache,
+    deleteIncomeAndUpdateCache,
+    deleteExpenseAndUpdateCache,
+    loadInitialCache
+} from '../api/mymoney.js';
 import { formatCurrency, formatDate, getTransactionIcon, getDeleteIcon } from '../modules/helpers.js';
-import { categories } from '../modules/transactions.js';
+import { categories, mapCategoryToAPI, mapCategoryToFrontend } from '../modules/transactions.js';
+
 
 let transactions = [];
 let currentUser = null;
@@ -12,7 +21,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (user) {
             currentUser = user;
             console.log('User logged in:', currentUser.email);
-            await loadTransactionsFromAPI();
+            
+            // Garantir que cache está carregado
+            await loadInitialCache(currentUser.email);
+            
+            // Carregar transações do cache
+            await loadTransactionsFromCache();
             initializeTransactionForm();
             initializeFilters();
             updateTransactionsTable();
@@ -22,17 +36,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-async function loadTransactionsFromAPI() {
+// MODIFICADA: Carrega transações DO CACHE (não da API)
+async function loadTransactionsFromCache() {
     const userEmail = currentUser.email;
     const userName = userEmail.split('@')[0];
-    console.log('Loading transactions for user:', userName);
+    console.log('Loading transactions from cache for user:', userName);
     
     try {
-        const incomesResult = await getUserIncomes(userEmail);
-        const expensesResult = await getUserExpenses(userEmail);
-        
-        console.log('Incomes result:', incomesResult);
-        console.log('Expenses result:', expensesResult);
+        const incomesResult = await getUserIncomesFromCache(userEmail);
+        const expensesResult = await getUserExpensesFromCache(userEmail);
         
         const incomes = (incomesResult.success && incomesResult.data ? incomesResult.data : []).map(inc => ({
             id: inc._id,
@@ -48,7 +60,7 @@ async function loadTransactionsFromAPI() {
             id: exp._id,
             type: 'expense',
             amount: exp.amount,
-            category: exp.category || 'Other',
+            category: mapCategoryToFrontend(exp.category, 'expense') || 'Other',
             description: exp.description,
             date: exp.date.split('T')[0],
             method: 'API'
@@ -57,33 +69,47 @@ async function loadTransactionsFromAPI() {
         transactions = [...incomes, ...expenses];
         transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
         
-        console.log(`Loaded ${transactions.length} transactions for user ${userName}`);
-        console.log('Transactions:', transactions);
+        console.log(`Loaded ${transactions.length} transactions from cache for user ${userName}`);
         
     } catch (error) {
-        console.error('Error loading transactions:', error);
+        console.error('Error loading transactions from cache:', error);
         transactions = [];
     }
 }
 
+// MODIFICADA: Usa função com cache automático
 async function addTransactionToAPI(transaction) {
     const userEmail = currentUser.email;
-    console.log('Adding transaction for user:', userEmail);
+    const userName = userEmail.split('@')[0];
+    console.log('Adding transaction for user:', userName);
     console.log('Transaction data:', transaction);
     
     let result;
     
     if (transaction.type === 'income') {
-        result = await addUserIncome(userEmail, transaction);
+        result = await addIncomeAndUpdateCache({
+            user: userName,
+            description: transaction.description,
+            amount: transaction.amount,
+            date: transaction.date
+        });
     } else {
-        result = await addUserExpense(userEmail, transaction);
+        const categoryInPortuguese = mapCategoryToAPI(transaction.category, 'expense');
+        result = await addExpenseAndUpdateCache({
+            user: userName,
+            description: transaction.description,
+            amount: transaction.amount,
+            date: transaction.date,
+            category: categoryInPortuguese
+        });
     }
     
     console.log('API result:', result);
     
     if (result.success) {
-        console.log('Transaction added successfully, reloading...');
-        await loadTransactionsFromAPI(); // Recarregar dados
+        console.log('Transaction added, cache already updated');
+        // Recarregar do cache (já atualizado)
+        await loadTransactionsFromCache();
         return true;
     } else {
         console.error('Failed to add transaction:', result.error);
@@ -147,8 +173,8 @@ function initializeTransactionForm() {
         
         if (success) {
             console.log('Updating UI after successful add');
-            updateTransactionsTable();  // Atualizar tabela
-            updateFilterCategories();   // Atualizar filtros
+            updateTransactionsTable();
+            updateFilterCategories();
             formContainer.style.display = 'none';
             form.reset();
             dateInput.value = new Date().toISOString().split('T')[0];
@@ -252,17 +278,19 @@ function updateTransactionsTable() {
     });
 }
 
+// MODIFICADA: Usa função com cache automático
 async function deleteTransactionFromAPI(id, type) {
     let result;
     
     if (type === 'income') {
-        result = await deleteIncome(id);
+        result = await deleteIncomeAndUpdateCache(id);
     } else {
-        result = await deleteExpense(id);
+        result = await deleteExpenseAndUpdateCache(id);
     }
     
     if (result.success) {
-        await loadTransactionsFromAPI();
+        console.log('Transaction deleted, cache already updated');
+        await loadTransactionsFromCache();
         return true;
     } else {
         console.error('Failed to delete:', result.error);

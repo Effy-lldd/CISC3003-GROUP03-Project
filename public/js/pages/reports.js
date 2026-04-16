@@ -1,8 +1,66 @@
 // ======================== REPORTS PAGE ========================
+import { auth } from '../firebase/auth.js';
+import { getUserIncomesFromCache, getUserExpensesFromCache, loadInitialCache } from '../api/mymoney.js';
+import { formatCurrency } from '../modules/helpers.js';
+import { mapCategoryToFrontend } from '../modules/transactions.js';
+
+let transactions = [];
+let currentUser = null;
+
 document.addEventListener('DOMContentLoaded', function () {
-    loadTransactions();
-    updateReports();
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            currentUser = user;
+            
+            // Garantir que cache está carregado
+            await loadInitialCache(currentUser.email);
+            
+            // Carregar transações do cache
+            await loadTransactionsFromCache();
+            updateReports();
+        } else {
+            window.location.href = 'login.html';
+        }
+    });
 });
+
+// NOVA FUNÇÃO: Carrega transações DO CACHE
+async function loadTransactionsFromCache() {
+    const userEmail = currentUser.email;
+    
+    try {
+        const incomesResult = await getUserIncomesFromCache(userEmail);
+        const expensesResult = await getUserExpensesFromCache(userEmail);
+        
+        const incomes = (incomesResult.success ? incomesResult.data : []).map(inc => ({
+            id: inc._id,
+            type: 'income',
+            amount: inc.amount,
+            category: inc.category || 'Salary',
+            description: inc.description,
+            date: inc.date.split('T')[0],
+            method: 'API'
+        }));
+        
+        const expenses = (expensesResult.success ? expensesResult.data : []).map(exp => ({
+            id: exp._id,
+            type: 'expense',
+            amount: exp.amount,
+            category: mapCategoryToFrontend(exp.category, 'expense') || 'Other',
+            description: exp.description,
+            date: exp.date.split('T')[0],
+            method: 'API'
+        }));
+        
+        transactions = [...incomes, ...expenses];
+        
+        console.log(`Reports loaded ${transactions.length} transactions from cache`);
+        
+    } catch (error) {
+        console.error('Error loading transactions for reports:', error);
+        transactions = [];
+    }
+}
 
 function updateReports() {
     const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);

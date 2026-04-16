@@ -1,68 +1,67 @@
 // ======================== DASHBOARD PAGE ========================
 import { auth } from '../firebase/auth.js';
-import { getUserIncomes, getUserExpenses } from '../api/mymoney.js';
+import { getUserIncomesFromCache, getUserExpensesFromCache, loadInitialCache } from '../api/mymoney.js';
 import { formatCurrency, formatDate, getTransactionIcon } from '../modules/helpers.js';
+import { mapCategoryToFrontend } from '../modules/transactions.js';
 
 let transactions = [];
 let currentUser = null;
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Aguardar o Firebase carregar o usuário
     auth.onAuthStateChanged(async (user) => {
         if (user) {
             currentUser = user;
-            await loadTransactionsFromAPI();
+            
+            // Carrega cache uma única vez
+            await loadInitialCache(currentUser.email);
+            
+            // Carrega dados do cache (0 API calls)
+            await loadTransactionsFromCache();
             updateDashboard();
         } else {
-            // Usuário não logado - redirecionar
             window.location.href = 'login.html';
         }
     });
 });
 
-// NOVA FUNÇÃO: Carregar transações da API filtradas por usuário
-async function loadTransactionsFromAPI() {
+// NOVA FUNÇÃO: Carrega transações DO CACHE (sem chamar API)
+async function loadTransactionsFromCache() {
     const userEmail = currentUser.email;
     const userName = userEmail.split('@')[0];
     
-    // Mostrar loading nos cards
     showLoading();
     
     try {
-        // Buscar incomes e expenses da API
-        const incomesResult = await getUserIncomes(userEmail);
-        const expensesResult = await getUserExpenses(userEmail);
+        const incomesResult = await getUserIncomesFromCache(userEmail);
+        const expensesResult = await getUserExpensesFromCache(userEmail);
         
-        // Processar incomes
         const incomes = (incomesResult.success ? incomesResult.data : []).map(inc => ({
             id: inc._id,
             type: 'income',
             amount: inc.amount,
             category: inc.category || 'Salary',
             description: inc.description,
-            date: inc.date.split('T')[0], // Formato YYYY-MM-DD
+            date: inc.date.split('T')[0],
             method: 'API'
         }));
         
-        // Processar expenses
         const expenses = (expensesResult.success ? expensesResult.data : []).map(exp => ({
             id: exp._id,
             type: 'expense',
             amount: exp.amount,
-            category: exp.category || 'Other',
+            category: mapCategoryToFrontend(exp.category, 'expense') || 'Other',
             description: exp.description,
             date: exp.date.split('T')[0],
             method: 'API'
         }));
         
-        // Combinar e ordenar por data (mais recente primeiro)
         transactions = [...incomes, ...expenses];
         transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
         
-        console.log(`Loaded ${transactions.length} transactions for user: ${userName}`);
+        console.log(`Loaded ${transactions.length} transactions from cache for user: ${userName}`);
         
     } catch (error) {
-        console.error('Error loading transactions:', error);
+        console.error('Error loading transactions from cache:', error);
         transactions = [];
     }
     
@@ -78,10 +77,9 @@ function showLoading() {
 }
 
 function hideLoading() {
-    // O updateDashboard vai preencher os dados
+    // updateDashboard vai preencher os dados
 }
 
-// SUA FUNÇÃO ORIGINAL - NÃO MUDA!
 function updateDashboard() {
     const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
     const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
@@ -115,7 +113,6 @@ function updateDashboard() {
     updateRecentTransactions();
 }
 
-// SUA FUNÇÃO ORIGINAL - NÃO MUDA!
 function updateRecentTransactions() {
     const container = document.getElementById('recent-transactions');
     const recent = transactions.slice(0, 5);
