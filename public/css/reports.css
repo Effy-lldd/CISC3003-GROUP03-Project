@@ -11,34 +11,45 @@
     border: 1px solid #2a2a2a;
     border-radius: 16px;
     padding: 24px;
+    transition: all 0.2s ease-in-out;
+}
+
+.stat-card:hover {
+    border-color: #3a3a3a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .stat-header {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .stat-header .icon {
     width: 20px;
     height: 20px;
     stroke-width: 2;
+    flex-shrink: 0;
 }
 
 .stat-header p {
     font-size: 14px;
     color: #9ca3af;
+    margin: 0;
 }
 
 .stat-card h3 {
-    font-size: 30px;
-    margin-bottom: 4px;
+    font-size: 32px;
+    margin: 0 0 8px 0;
+    font-weight: 600;
 }
 
 .stat-info {
     font-size: 14px;
     color: #9ca3af;
+    margin: 0;
 }
 
 /* Chart Styles */
@@ -46,8 +57,9 @@
     display: flex;
     align-items: flex-end;
     gap: 16px;
-    height: 200px;
+    height: 220px;
     padding: 0 8px;
+    margin: 16px 0;
 }
 
 .chart-bar-group {
@@ -55,14 +67,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
 }
 
 .chart-bars {
     display: flex;
     gap: 4px;
     align-items: flex-end;
-    height: 160px;
+    height: 180px;
     width: 100%;
 }
 
@@ -71,7 +83,7 @@
     background-color: #22c55e;
     border-radius: 4px 4px 0 0;
     min-height: 4px;
-    transition: height 0.3s;
+    transition: height 0.3s ease;
 }
 
 .chart-bar-expense {
@@ -79,20 +91,27 @@
     background-color: #ef4444;
     border-radius: 4px 4px 0 0;
     min-height: 4px;
-    transition: height 0.3s;
+    transition: height 0.3s ease;
+}
+
+.chart-bar-income:hover,
+.chart-bar-expense:hover {
+    opacity: 0.9;
 }
 
 .chart-bar-label {
-    font-size: 11px;
+    font-size: 12px;
     color: #9ca3af;
     white-space: nowrap;
+    text-align: center;
 }
 
 .chart-legend {
     display: flex;
     gap: 24px;
     justify-content: center;
-    margin-top: 16px;
+    margin-top: 8px;
+    padding-bottom: 8px;
 }
 
 .legend-item {
@@ -105,6 +124,7 @@
     width: 12px;
     height: 12px;
     border-radius: 2px;
+    flex-shrink: 0;
 }
 
 .legend-item span {
@@ -115,6 +135,8 @@
 /* Table Styles */
 .table-container {
     overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid #2a2a2a;
 }
 
 .transactions-table {
@@ -133,25 +155,93 @@
     font-size: 14px;
     color: #9ca3af;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .transactions-table tbody tr {
     border-bottom: 1px solid #2a2a2a;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s ease;
+}
+
+.transactions-table tbody tr:last-child {
+    border-bottom: none;
 }
 
 .transactions-table tbody tr:hover {
-    background-color: #0a0a0a;
+    background-color: #0f0f0f;
 }
 
 .transactions-table td {
     padding: 16px 24px;
     font-size: 14px;
+    white-space: nowrap;
+}
+
+/* Text Alignment & Colors */
+.text-right {
+    text-align: right;
+}
+
+.green {
+    color: #22c55e;
+}
+
+.red {
+    color: #ef4444;
+}
+
+.teal {
+    color: #14b8a6;
+}
+
+.green-bg {
+    background-color: #22c55e;
+}
+
+.red-bg {
+    background-color: #ef4444;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .stats-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+
+    .chart-container {
+        height: 200px;
+        gap: 8px;
+    }
+
+    .chart-bars {
+        height: 160px;
+    }
+
+    .transactions-table th,
+    .transactions-table td {
+        padding: 12px 16px;
+    }
+
+    .chart-legend {
+        gap: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-card h3 {
+        font-size: 28px;
+    }
+
+    .chart-container {
+        height: 180px;
+    }
+
+    .chart-bar-label {
+        font-size: 10px;
     }
 }
