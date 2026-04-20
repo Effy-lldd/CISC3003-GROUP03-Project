@@ -12,6 +12,35 @@
     border-radius: 16px;
     padding: 24px;
     transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.stat-card:hover::before {
+    opacity: 1;
+}
+
+.stat-card:nth-child(1):hover::before {
+    background-color: #22c55e;
+}
+
+.stat-card:nth-child(2):hover::before {
+    background-color: #ef4444;
+}
+
+.stat-card:nth-child(3):hover::before {
+    background-color: #14b8a6;
 }
 
 .stat-card:hover {
@@ -44,6 +73,7 @@
     font-size: 32px;
     margin: 0 0 8px 0;
     font-weight: 600;
+    line-height: 1.2;
 }
 
 .stat-info {
@@ -60,6 +90,7 @@
     height: 220px;
     padding: 0 8px;
     margin: 16px 0;
+    min-width: 0; /* 修复flex容器溢出问题 */
 }
 
 .chart-bar-group {
@@ -68,6 +99,7 @@
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    min-width: 40px; /* 确保最小宽度 */
 }
 
 .chart-bars {
@@ -83,7 +115,8 @@
     background-color: #22c55e;
     border-radius: 4px 4px 0 0;
     min-height: 4px;
-    transition: height 0.3s ease;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .chart-bar-expense {
@@ -91,12 +124,14 @@
     background-color: #ef4444;
     border-radius: 4px 4px 0 0;
     min-height: 4px;
-    transition: height 0.3s ease;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .chart-bar-income:hover,
 .chart-bar-expense:hover {
     opacity: 0.9;
+    transform: translateY(-2px);
 }
 
 .chart-bar-label {
@@ -104,6 +139,7 @@
     color: #9ca3af;
     white-space: nowrap;
     text-align: center;
+    line-height: 1.2;
 }
 
 .chart-legend {
@@ -112,6 +148,7 @@
     justify-content: center;
     margin-top: 8px;
     padding-bottom: 8px;
+    flex-wrap: wrap; /* 适配小屏幕 */
 }
 
 .legend-item {
@@ -132,16 +169,20 @@
     color: #9ca3af;
 }
 
-/* Table Styles */
+/* Table Styles - 彻底修复对齐问题 */
 .table-container {
     overflow-x: auto;
     border-radius: 12px;
     border: 1px solid #2a2a2a;
+    margin: 8px 0;
 }
 
 .transactions-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed; /* 强制列宽按比例分配，不受内容影响 */
+    min-width: 600px;
 }
 
 .transactions-table thead {
@@ -149,13 +190,53 @@
     border-bottom: 1px solid #2a2a2a;
 }
 
-.transactions-table th {
+/* 表头和表体的内边距、对齐方式完全统一 */
+.transactions-table th,
+.transactions-table td {
     padding: 16px 24px;
-    text-align: left;
     font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 给每一列固定宽度，严格对应5列结构 */
+/* 第1列：Month 左对齐 */
+.transactions-table th:nth-child(1),
+.transactions-table td:nth-child(1) {
+    width: 25%;
+    text-align: left;
+}
+/* 第2列：Income 右对齐 */
+.transactions-table th:nth-child(2),
+.transactions-table td:nth-child(2) {
+    width: 20%;
+    text-align: right;
+}
+/* 第3列：Expenses 右对齐 */
+.transactions-table th:nth-child(3),
+.transactions-table td:nth-child(3) {
+    width: 20%;
+    text-align: right;
+}
+/* 第4列：Net 右对齐 */
+.transactions-table th:nth-child(4),
+.transactions-table td:nth-child(4) {
+    width: 20%;
+    text-align: right;
+}
+/* 第5列：Savings Rate 右对齐 */
+.transactions-table th:nth-child(5),
+.transactions-table td:nth-child(5) {
+    width: 15%;
+    text-align: right;
+}
+
+.transactions-table th {
     color: #9ca3af;
     font-weight: 500;
-    white-space: nowrap;
+    position: sticky;
+    top: 0;
 }
 
 .transactions-table tbody tr {
@@ -202,6 +283,22 @@
     background-color: #ef4444;
 }
 
+/* 卡片通用样式 */
+.card {
+    background-color: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.card h4 {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #f3f4f6;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .stats-grid {
@@ -216,6 +313,8 @@
     .chart-container {
         height: 200px;
         gap: 8px;
+        overflow-x: auto; /* 图表横向滚动 */
+        padding-bottom: 16px;
     }
 
     .chart-bars {
@@ -230,6 +329,11 @@
     .chart-legend {
         gap: 16px;
     }
+
+    .card {
+        padding: 20px;
+        margin-bottom: 16px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -243,5 +347,41 @@
 
     .chart-bar-label {
         font-size: 10px;
+    }
+
+    .card h4 {
+        font-size: 16px;
+    }
+
+    .transactions-table th,
+    .transactions-table td {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}
+
+/* 加载状态样式（预留） */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    color: #9ca3af;
+}
+
+.loading::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid #2a2a2a;
+    border-top-color: #14b8a6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
 }
