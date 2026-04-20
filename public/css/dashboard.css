@@ -1,248 +1,35 @@
 /* ======================== DASHBOARD PAGE STYLES ======================== */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
-}
-
-.stat-card {
-    background-color: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 16px;
-    padding: 24px;
-}
-
-.stat-card.gradient {
-    background: linear-gradient(to bottom right, #10b981, #06b6d4);
-    border: none;
-}
-
-.stat-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-}
-
-.stat-header .icon {
-    width: 20px;
-    height: 20px;
-    stroke-width: 2;
-}
-
-.stat-header p {
-    font-size: 14px;
-    color: #9ca3af;
-}
-
-.stat-card.gradient .stat-header p {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.stat-card h3 {
-    font-size: 30px;
-    margin-bottom: 4px;
-}
-
-.stat-date, .stat-info {
-    font-size: 14px;
-    color: #9ca3af;
-}
-
-.stat-card.gradient .stat-date {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-/* Overview Grid */
-.overview-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
-}
-
-.overview-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
-
-.overview-item {
-    text-align: center;
-}
-
-.overview-circle {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 8px;
-    font-size: 24px;
-}
-
-.overview-circle.teal {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-}
-
-.overview-circle.green {
-    background-color: rgba(34, 197, 94, 0.1);
-    color: #22c55e;
-}
-
-.overview-circle.red {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-}
-
-.overview-item p {
-    font-size: 12px;
-    color: #9ca3af;
-}
-
-/* Health Stats */
-.health-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.health-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 14px;
-}
-
-.health-header span:first-child {
-    color: #9ca3af;
-}
-
-.progress-bar {
-    height: 8px;
-    background-color: #2a2a2a;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    transition: width 0.3s ease;
-}
-
-.progress-fill.gradient {
-    background: linear-gradient(to right, #10b981, #06b6d4);
-}
-
-.progress-fill.red {
-    background-color: #ef4444;
-}
-
-/* Transactions List */
-.transactions-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.transaction-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    background-color: #0a0a0a;
-    border: 1px solid #2a2a2a;
-    border-radius: 8px;
-    transition: border-color 0.2s;
-}
-
-.transaction-item:hover {
-    border-color: #374151;
-}
-
-.transaction-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.transaction-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.transaction-icon.income {
-    background-color: rgba(34, 197, 94, 0.1);
-    color: #22c55e;
-}
-
-.transaction-icon.expense {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-}
-
-.transaction-icon .icon {
-    width: 20px;
-    height: 20px;
-    stroke-width: 2;
-}
-
-.transaction-info h5 {
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 4px;
-}
-
-.transaction-info p {
-    font-size: 12px;
-    color: #9ca3af;
-}
-
-.transaction-right {
-    text-align: right;
-}
-
-.transaction-amount {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.transaction-method {
-    font-size: 12px;
-    color: #6b7280;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .stats-grid,
-    .overview-grid {
-        grid-template-columns: 1fr;
-    }
-}
-/* ======================== DASHBOARD PAGE STYLES ======================== */
-.stats-grid {
-    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 24px;
     margin-bottom: 40px;
 }
 
 .stat-card {
-    /* 玻璃拟态效果 */
+    /* 增强玻璃拟态 + 细微纹理 */
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 24px;
     padding: 28px;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 新增：卡片背景细微光效纹理 */
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 80%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
 }
 
 .stat-card:hover {
@@ -250,6 +37,10 @@
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(16, 185, 129, 0.3);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.stat-card:hover::before {
+    opacity: 1;
 }
 
 .stat-card.gradient {
@@ -268,6 +59,13 @@
     height: 200%;
     background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
     opacity: 0.5;
+    animation: gradientShimmer 8s infinite linear;
+}
+
+/* 新增：渐变光效动画 */
+@keyframes gradientShimmer {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .stat-card.gradient h3, 
@@ -284,11 +82,47 @@
     margin-bottom: 16px;
 }
 
+.stat-header .icon {
+    width: 24px;
+    height: 24px;
+    stroke-width: 1.5;
+    /* 新增：图标呼吸动画 */
+    animation: iconPulse 3s infinite ease-in-out;
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
 .stat-card h3 {
     font-size: 36px;
     font-weight: 800;
     margin-bottom: 8px;
     letter-spacing: -1px;
+    /* 新增：数字渐变文字 */
+    background: linear-gradient(to right, #fff, #e5e7eb);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.stat-card.gradient h3 {
+    background: linear-gradient(to right, #000, #1f2937);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.stat-date, .stat-info {
+    font-size: 14px;
+    color: #9ca3af;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover .stat-date,
+.stat-card:hover .stat-info {
+    color: #d1d5db;
 }
 
 /* Overview Grid */
@@ -304,6 +138,32 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 24px;
     padding: 32px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+/* 新增：标题下划线装饰 */
+.card h4::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(to right, #10b981, #06b6d4);
+    border-radius: 2px;
 }
 
 .overview-stats {
@@ -313,41 +173,140 @@
     margin-top: 20px;
 }
 
+.overview-item {
+    /* 新增：给每个统计项添加flex布局，让数字和文字垂直居中对齐 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
 .overview-circle {
     width: 72px;
     height: 72px;
-    border-radius: 20px; /* 改为稍微圆润的矩形更有设计感 */
+    border-radius: 20px; 
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 12px;
+    align-items: center; /* 数字在圆形框内垂直居中 */
+    justify-content: center; /* 数字在圆形框内水平居中 */
+    margin: 0 auto 12px; /* 保持底部间距，auto让圆形框水平居中 */
     font-size: 24px;
     font-weight: 700;
-    transition: transform 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 新增：圆形背景光效 */
+.overview-circle::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .overview-item:hover .overview-circle {
     transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.overview-item:hover .overview-circle::before {
+    opacity: 1;
+}
+
+.overview-circle.teal {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+    color: #10b981;
+}
+
+.overview-circle.green {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+    color: #22c55e;
+}
+
+.overview-circle.red {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+    color: #ef4444;
+}
+
+.overview-item p {
+    font-size: 12px;
+    color: #9ca3af;
+    transition: color 0.3s ease;
+    /* 新增：确保文字不换行，且居中 */
+    white-space: nowrap;
+    text-align: center;
+    width: 100%;
+}
+
+.overview-item:hover p {
+    color: #fff;
+}
+
+/* Health Stats */
+.health-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.health-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.health-header span:first-child {
+    color: #9ca3af;
 }
 
 /* Progress Bar Shine */
 .progress-bar {
-    height: 8px;
+    height: 10px;
     background-color: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     overflow: hidden;
     margin-top: 10px;
+    position: relative;
+}
+
+.progress-bar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: progressShine 2s infinite linear;
+}
+
+@keyframes progressShine {
+    0% { left: -100%; }
+    100% { left: 200%; }
 }
 
 .progress-fill {
     height: 100%;
     border-radius: 10px;
     transition: width 1s cubic-bezier(0.65, 0, 0.35, 1);
+    position: relative;
 }
 
 .progress-fill.gradient {
     background: linear-gradient(to right, #10b981, #3b82f6);
     box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.progress-fill.red {
+    background: linear-gradient(to right, #ef4444, #f87171);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
 }
 
 /* Transactions List */
@@ -365,33 +324,98 @@
     background: rgba(255, 255, 255, 0.01);
     border: 1px solid rgba(255, 255, 255, 0.03);
     border-radius: 16px;
-    transition: 0.3s;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 新增：交易项左侧渐变边框 */
+.transaction-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(to bottom, #10b981, #06b6d4);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.transaction-item.expense::before {
+    background: linear-gradient(to bottom, #ef4444, #f87171);
 }
 
 .transaction-item:hover {
     background: rgba(255, 255, 255, 0.04);
     border-color: rgba(255, 255, 255, 0.1);
     transform: scale(1.01);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.transaction-item:hover::before {
+    opacity: 1;
 }
 
 .transaction-icon {
     width: 48px;
     height: 48px;
     border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.transaction-item:hover .transaction-icon {
+    transform: scale(1.1);
+}
+
+.transaction-icon.income {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+    color: #22c55e;
+}
+
+.transaction-icon.expense {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+    color: #ef4444;
 }
 
 .transaction-info h5 {
     font-size: 15px;
     font-weight: 600;
     color: #fff;
+    transition: color 0.3s ease;
+}
+
+.transaction-item:hover .transaction-info h5 {
+    color: #10b981;
+}
+
+.transaction-item.expense:hover .transaction-info h5 {
+    color: #ef4444;
+}
+
+.transaction-info p {
+    font-size: 12px;
+    color: #9ca3af;
 }
 
 .transaction-amount {
     font-size: 16px;
     font-weight: 700;
+    transition: all 0.3s ease;
 }
 
+.transaction-item:hover .transaction-amount {
+    transform: translateX(-4px);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
     .overview-grid { grid-template-columns: 1fr; }
     .stat-card { padding: 20px; }
+    .card { padding: 24px; }
+    .overview-stats { gap: 16px; }
+    .overview-circle { width: 64px; height: 64px; }
 }
