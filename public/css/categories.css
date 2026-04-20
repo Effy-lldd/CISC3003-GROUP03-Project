@@ -1,4 +1,92 @@
 /* ======================== CATEGORIES PAGE STYLES ======================== */
+/* 保持和dashboard一致的统计卡片样式 */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    /* 复用dashboard的玻璃拟态+渐变质感 */
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 28px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 卡片背景光效纹理（和dashboard一致） */
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 80%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.stat-card:hover::before {
+    opacity: 1;
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.stat-header .icon {
+    width: 24px;
+    height: 24px;
+    stroke-width: 1.5;
+    /* 图标呼吸动画（和dashboard一致） */
+    animation: iconPulse 3s infinite ease-in-out;
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+.stat-card h3 {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+    /* 渐变文字（和dashboard一致） */
+    background: linear-gradient(to right, #fff, #e5e7eb);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.stat-info {
+    font-size: 14px;
+    color: #9ca3af;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover .stat-info {
+    color: #d1d5db;
+}
+
+/* 分类列表样式（匹配dashboard的卡片风格） */
 .categories-list {
     display: flex;
     flex-direction: column;
@@ -8,13 +96,44 @@
 .category-item {
     display: flex;
     flex-direction: column;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 分类项左侧渐变边框（和dashboard交易项一致） */
+.category-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(to bottom, #10b981, #06b6d4);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.category-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.01);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.category-item:hover::before {
+    opacity: 1;
 }
 
 .category-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .category-left {
@@ -24,21 +143,33 @@
 }
 
 .category-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
     font-weight: 600;
     color: #fff;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.category-item:hover .category-icon {
+    transform: scale(1.1);
 }
 
 .category-name h5 {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    transition: color 0.3s ease;
     margin-bottom: 4px;
+}
+
+.category-item:hover .category-name h5 {
+    color: #10b981;
 }
 
 .category-name p {
@@ -51,9 +182,13 @@
 }
 
 .category-amount {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 4px;
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.category-item:hover .category-amount {
+    transform: translateX(-4px);
 }
 
 .category-percentage {
@@ -61,51 +196,73 @@
     color: #9ca3af;
 }
 
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
+/* 进度条样式（和dashboard一致的流光效果） */
+.progress-bar {
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 8px;
+    position: relative;
 }
 
-.stat-card {
-    background-color: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 16px;
-    padding: 24px;
+.progress-bar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: progressShine 2s infinite linear;
 }
 
-.stat-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+@keyframes progressShine {
+    0% { left: -100%; }
+    100% { left: 200%; }
 }
 
-.stat-header .icon {
-    width: 20px;
-    height: 20px;
-    stroke-width: 2;
+.progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s cubic-bezier(0.65, 0, 0.35, 1);
+    position: relative;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
 }
 
-.stat-header p {
-    font-size: 14px;
+/* 空状态样式优化（匹配整体风格） */
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
     color: #9ca3af;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
 }
 
-.stat-card h3 {
-    font-size: 30px;
-    margin-bottom: 4px;
+/* 卡片标题样式（和dashboard一致的下划线） */
+.card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    position: relative;
+    padding-bottom: 12px;
 }
 
-.stat-info {
-    font-size: 14px;
-    color: #9ca3af;
+.card h4::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(to right, #10b981, #06b6d4);
+    border-radius: 2px;
 }
 
-/* Responsive */
+/* 响应式适配（和dashboard一致） */
 @media (max-width: 768px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
+    .stats-grid { grid-template-columns: 1fr; }
+    .stat-card { padding: 20px; }
+    .category-item { padding: 16px; }
 }
