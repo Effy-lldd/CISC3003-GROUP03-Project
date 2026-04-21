@@ -5,6 +5,7 @@ function initializeMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const sidebar = document.getElementById('sidebar');
     
+    // 创建遮罩层（如果不存在）
     let overlay = document.querySelector('.sidebar-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
@@ -14,24 +15,30 @@ function initializeMobileMenu() {
 
     if (!menuBtn || !sidebar) return;
 
+    // 点击汉堡按钮切换侧边栏
     menuBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
+        e.stopPropagation(); // 防止事件冒泡
         sidebar.classList.toggle('open');
         overlay.classList.toggle('active');
+        // 切换按钮图标（汉堡 ↔ 关闭）
         menuBtn.innerHTML = sidebar.classList.contains('open') 
             ? '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'
             : '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
         
+        // 禁止/允许页面滚动
         document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
     });
 
+    // 点击遮罩层关闭侧边栏
     overlay.addEventListener('click', () => {
         sidebar.classList.remove('open');
         overlay.classList.remove('active');
+        // 恢复汉堡图标
         menuBtn.innerHTML = '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
-        document.body.style.overflow = '';
+        document.body.style.overflow = ''; // 恢复滚动
     });
 
+    // 点击侧边栏内部链接时关闭侧边栏（移动端）
     const navLinks = sidebar.querySelectorAll('.nav-item');
     navLinks.forEach(link => {
         if (link.tagName === 'A') {
@@ -47,26 +54,24 @@ function initializeMobileMenu() {
     });
 }
 
-// 新增：初始化主题（页面加载自动应用）
-function initTheme() {
-    const isLight = localStorage.getItem('lightMode') === 'true';
-    document.body.classList.toggle('light-mode', isLight);
-}
-
+// 渲染侧边栏
 document.addEventListener('DOMContentLoaded', () => {
-    initTheme(); // 初始化主题
     const sidebarContainer = document.getElementById('sidebar-container');
     if (!sidebarContainer) return;
 
+    // 监听认证状态变化
     onAuthChange((user) => {
         if (!user) {
+            // 未登录时隐藏侧边栏容器
             sidebarContainer.style.display = 'none';
             return;
         }
 
+        // 显示侧边栏容器
         sidebarContainer.style.display = 'block';
         const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
         
+        // 渲染侧边栏HTML
         sidebarContainer.innerHTML = `
             <aside class="sidebar" id="sidebar">
                 <div class="sidebar-header">
@@ -85,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span>Dashboard</span>
                     </a>
                     <a href="transactions.html" class="nav-item ${currentPage === 'transactions' ? 'active' : ''}">
-                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9 a4 4 0 0 1 4 -4 h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1 -4 4H3"></path></svg>
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
                         <span>Transactions</span>
                     </a>
                     <a href="categories.html" class="nav-item ${currentPage === 'categories' ? 'active' : ''}">
@@ -106,10 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="user-name">${user.displayName || 'Usuário'}</p>
                         <p class="user-email">${user.email}</p>
                     </div>
-                    <div class="theme-toggle-btn nav-item" id="theme-toggle">
-                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        <span id="theme-text">${localStorage.getItem('lightMode') === 'true' ? 'Light Mode' : 'Dark Mode'}</span>
-                    </div>
                     <button class="nav-item signout-btn" id="signout-btn">
                         <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                         <span>Sign Out</span>
@@ -121,11 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>
         `;
 
+        // 绑定退出登录事件
         const signoutBtn = document.getElementById('signout-btn');
         if (signoutBtn) {
             signoutBtn.addEventListener('click', async () => {
                 try {
                     await signOut();
+                    // 退出后跳转到登录页（根据你的项目调整路径）
                     window.location.href = 'login.html';
                 } catch (error) {
                     console.error('Sign out error:', error);
@@ -133,18 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // 主题切换逻辑
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeText = document.getElementById('theme-text');
-        if (themeToggle && themeText) {
-            themeToggle.addEventListener('click', () => {
-                const isLight = localStorage.getItem('lightMode') === 'true';
-                localStorage.setItem('lightMode', !isLight);
-                document.body.classList.toggle('light-mode', !isLight);
-                themeText.textContent = !isLight ? 'Light Mode' : 'Dark Mode';
-            });
-        }
-
+        // 初始化移动端菜单交互
         initializeMobileMenu();
     });
 });
