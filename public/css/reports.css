@@ -32,11 +32,11 @@
 }
 
 .stat-card:nth-child(1):hover::before {
-    background-color: #22c55e;
+    background-color: #98e5db;
 }
 
 .stat-card:nth-child(2):hover::before {
-    background-color: #ef4444;
+    background-color: #eeb58f;
 }
 
 .stat-card:nth-child(3):hover::before {
@@ -112,7 +112,7 @@
 
 .chart-bar-income {
     flex: 1;
-    background-color: #22c55e;
+    background-color: #98e5db;
     border-radius: 4px 4px 0 0;
     min-height: 4px;
     transition: all 0.3s ease;
@@ -121,7 +121,7 @@
 
 .chart-bar-expense {
     flex: 1;
-    background-color: #ef4444;
+    background-color: #eeb58f;
     border-radius: 4px 4px 0 0;
     min-height: 4px;
     transition: all 0.3s ease;
@@ -264,11 +264,11 @@
 }
 
 .green {
-    color: #22c55e;
+    color: #98e5db;
 }
 
 .red {
-    color: #ef4444;
+    color: #eeb58f;
 }
 
 .teal {
@@ -276,11 +276,11 @@
 }
 
 .green-bg {
-    background-color: #22c55e;
+    background-color: #98e5db;
 }
 
 .red-bg {
-    background-color: #ef4444;
+    background-color: #eeb58f;
 }
 
 /* 卡片通用样式 */

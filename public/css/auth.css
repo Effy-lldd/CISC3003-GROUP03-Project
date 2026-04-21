@@ -21,7 +21,7 @@
 .auth-logo .logo-icon {
     width: 48px;
     height: 48px;
-    background: linear-gradient(to bottom right, #10b981, #06b6d4);
+    background: linear-gradient(to bottom right, #98e5db, #06b6d4);
     border-radius: 12px;
     display: inline-flex;
     align-items: center;
@@ -61,7 +61,7 @@
 }
 
 .auth-error {
-    color: #ef4444;
+    color: #eeb58f;
     font-size: 13px;
     margin-bottom: 12px;
     padding: 10px 14px;
@@ -71,14 +71,14 @@
 }
 
 .auth-success {
-    color: #10b981;
+    color: #98e5db;
     font-size: 16px;
     padding: 24px;
     text-align: center;
 }
 
 .auth-success-text {
-    color: #10b981;
+    color: #98e5db;
     font-size: 14px;
     margin-bottom: 24px;
 }
@@ -93,7 +93,7 @@
 
 .auth-link-row a,
 .auth-footer-text a {
-    color: #10b981;
+    color: #98e5db;
     font-size: 13px;
     text-decoration: none;
     transition: opacity 0.2s;
@@ -166,7 +166,7 @@
 }
 
 .otp-input:focus {
-    border-color: #10b981;
+    border-color: #98e5db;
 }
 
 /* Responsive */

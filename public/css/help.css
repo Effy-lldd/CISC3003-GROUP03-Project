@@ -1,6 +1,6 @@
 /* ======================== HELP PAGE STYLES ======================== */
 .gradient-card {
-    background: linear-gradient(to bottom right, #10b981, #06b6d4);
+    background: linear-gradient(to bottom right, #98e5db, #06b6d4);
     border-radius: 24px;
     padding: 28px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
@@ -43,7 +43,7 @@
     bottom: 0;
     width: 40px;
     height: 2px;
-    background: linear-gradient(to right, #10b981, #06b6d4);
+    background: linear-gradient(to right, #98e5db, #06b6d4);
     border-radius: 1px;
 }
 
@@ -112,10 +112,10 @@
     color: #fff;
 }
 
-.gradient-1 { background: linear-gradient(to bottom right, #f59e0b, #ef4444); }
+.gradient-1 { background: linear-gradient(to bottom right, #f59e0b, #eeb58f); }
 .gradient-2 { background: linear-gradient(to bottom right, #8b5cf6, #ec4899); }
 .gradient-3 { background: linear-gradient(to bottom right, #3b82f6, #06b6d4); }
-.gradient-4 { background: linear-gradient(to bottom right, #10b981, #14b8a6); }
+.gradient-4 { background: linear-gradient(to bottom right, #98e5db, #14b8a6); }
 .gradient-5 { background: linear-gradient(to bottom right, #f97316, #f43f5e); }
 .gradient-6 { background: linear-gradient(to bottom right, #6366f1, #8b5cf6); }
 
@@ -147,7 +147,7 @@
 .step-number {
     width: 32px;
     height: 32px;
-    background: linear-gradient(to bottom right, #10b981, #06b6d4);
+    background: linear-gradient(to bottom right, #98e5db, #06b6d4);
     color: #000;
     border-radius: 50%;
     display: flex;

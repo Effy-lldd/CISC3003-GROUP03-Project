@@ -64,12 +64,12 @@ async function loadTransactionsFromCache() {
 
 function updateCategories() {
     const gradients = [
-        'linear-gradient(to bottom right, #10b981, #06b6d4)',
+        'linear-gradient(to bottom right, #98e5db, #06b6d4)',
         'linear-gradient(to bottom right, #3b82f6, #6366f1)',
         'linear-gradient(to bottom right, #a855f7, #ec4899)',
-        'linear-gradient(to bottom right, #f97316, #ef4444)',
+        'linear-gradient(to bottom right, #f97316, #eeb58f)',
         'linear-gradient(to bottom right, #facc15, #f97316)',
-        'linear-gradient(to bottom right, #22c55e, #10b981)'
+        'linear-gradient(to bottom right, #98e5db, #98e5db)'
     ];
 
     function buildCatData(type) {
@@ -128,7 +128,7 @@ function updateCategories() {
             <div class="category-item">
                 <div class="category-header">
                     <div class="category-left">
-                        <div class="category-icon" style="background-color:rgba(34,197,94,0.2); color:#22c55e;">${item.category.substring(0, 2).toUpperCase()}</div>
+                        <div class="category-icon" style="background-color:rgba(34,197,94,0.2); color:#98e5db;">${item.category.substring(0, 2).toUpperCase()}</div>
                         <div class="category-name"><h5>${item.category}</h5><p>${item.count} transactions</p></div>
                     </div>
                     <div class="category-right">
@@ -136,7 +136,7 @@ function updateCategories() {
                         <div class="category-percentage">${item.percentage.toFixed(1)}%</div>
                     </div>
                 </div>
-                <div class="progress-bar"><div class="progress-fill" style="width:${item.percentage}%; background-color:#22c55e;"></div></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:${item.percentage}%; background-color:#98e5db;"></div></div>
             </div>
         `).join('');
     }

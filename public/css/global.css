@@ -15,7 +15,7 @@ body {
 /* ======================== BUTTONS ======================== */
 .btn-primary {
     padding: 10px 16px;
-    background-color: #10b981;
+    background-color: #98e5db;
     color: #000;
     border: none;
     border-radius: 8px;
@@ -92,7 +92,7 @@ body {
 
 .form-group input:focus,
 .form-group select:focus {
-    border-color: #10b981;
+    border-color: #98e5db;
 }
 
 .form-actions {
@@ -122,20 +122,20 @@ body {
 }
 
 /* ======================== COLOR CLASSES ======================== */
-.green { color: #22c55e !important; }
-.red { color: #ef4444 !important; }
-.teal { color: #10b981 !important; }
+.green { color: #98e5db !important; }
+.red { color: #eeb58f !important; }
+.teal { color: #98e5db !important; }
 
 /* ======================== GRADIENT CLASSES ======================== */
-.gradient-1 { background: linear-gradient(to bottom right, #10b981, #06b6d4); }
+.gradient-1 { background: linear-gradient(to bottom right, #98e5db, #06b6d4); }
 .gradient-2 { background: linear-gradient(to bottom right, #3b82f6, #6366f1); }
 .gradient-3 { background: linear-gradient(to bottom right, #a855f7, #ec4899); }
-.gradient-4 { background: linear-gradient(to bottom right, #f97316, #ef4444); }
+.gradient-4 { background: linear-gradient(to bottom right, #f97316, #eeb58f); }
 .gradient-5 { background: linear-gradient(to bottom right, #facc15, #f97316); }
-.gradient-6 { background: linear-gradient(to bottom right, #22c55e, #10b981); }
+.gradient-6 { background: linear-gradient(to bottom right, #98e5db, #98e5db); }
 
-.green-bg { background-color: #22c55e; }
-.red-bg { background-color: #ef4444; }
+.green-bg { background-color: #98e5db; }
+.red-bg { background-color: #eeb58f; }
 
 /* ======================== UTILITY CLASSES ======================== */
 .text-right {

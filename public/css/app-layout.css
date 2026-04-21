@@ -42,7 +42,7 @@
     width: 40px;
     height: 40px;
     /* 渐变图标更醒目 */
-    background: linear-gradient(135deg, #10b981, #06b6d4);
+    background: linear-gradient(135deg, #98e5db, #06b6d4);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -125,7 +125,7 @@
 /* 激活项样式 - 带左侧指示条 */
 .nav-item.active {
     background-color: rgba(16, 185, 129, 0.1);
-    color: #10b981;
+    color: #98e5db;
 }
 .nav-item.active::before {
     content: '';
@@ -134,7 +134,7 @@
     top: 0;
     height: 100%;
     width: 3px;
-    background: linear-gradient(to bottom, #10b981, #06b6d4);
+    background: linear-gradient(to bottom, #98e5db, #06b6d4);
     border-radius: 0 2px 2px 0;
 }
 
@@ -178,7 +178,7 @@
 .signout-btn {
     width: 100%;
     background: transparent;
-    color:#ef4444;
+    color:#eeb58f;
     border: 1px solid rgba(239, 68, 68, 0.2);
     cursor: pointer;
     border-radius: 10px;
@@ -188,7 +188,7 @@
 
 .signout-btn:hover {
     background-color: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    color: #eeb58f;
     transform: translateY(-1px);
     box-shadow: 0 4px 10px rgba(239, 68, 68, 0.1);
 }
@@ -355,7 +355,7 @@
 
 .footer-section h4 {
     font-size: 14px;
-    color: #10b981;
+    color: #98e5db;
     margin-bottom: 8px;
     font-weight: 600;
 }
