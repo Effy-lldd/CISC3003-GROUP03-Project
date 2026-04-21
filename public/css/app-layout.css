@@ -178,7 +178,7 @@
 .signout-btn {
     width: 100%;
     background: transparent;
-    color:#ef4444;
+    color:#eeb58f;
     border: 1px solid rgba(239, 68, 68, 0.2);
     cursor: pointer;
     border-radius: 10px;
@@ -188,7 +188,7 @@
 
 .signout-btn:hover {
     background-color: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    color: #eeb58f;
     transform: translateY(-1px);
     box-shadow: 0 4px 10px rgba(239, 68, 68, 0.1);
 }
