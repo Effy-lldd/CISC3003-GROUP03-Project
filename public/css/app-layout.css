@@ -1,18 +1,35 @@
-/* ======================== APP LAYOUT STYLES ======================== */
+/* 暗黑/浅色模式核心变量 */
+:root {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1a1a1a;
+  --border-color: #2a2a2a;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --hover-color: rgba(255,255,255,0.05);
+}
+.light-mode {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --border-color: #e5e7eb;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+  --hover-color: rgba(0,0,0,0.05);
+}
+
 .app-container {
     display: flex;
     min-height: 100vh;
-    /* 背景渐变提升整体质感 */
-    background: radial-gradient(circle at top right, #1a1a1a, #0a0a0a);
+    background: var(--bg-primary);
 }
 
-/* Sidebar 核心样式 - 固定侧边栏高度+粘性定位 */
 .sidebar {
     width: 256px;
-    background-color: #111111;
-    /* 渐变背景增强层次感 */
-    background: linear-gradient(to bottom, #141414, #0f0f0f);
-    border-right: 1px solid #2a2a2a;
+    background-color: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
@@ -20,16 +37,11 @@
     top: 0;
     height: 100vh;
     z-index: 40;
-    /* 轻微内阴影提升立体度 */
-    box-shadow: inset -2px 0 10px rgba(0, 0, 0, 0.2);
 }
 
-/* 侧边栏头部 - 品牌区域 */
 .sidebar-header {
     padding: 24px;
-    border-bottom: 1px solid #2a2a2a;
-    /* 头部渐变分隔 */
-    background: linear-gradient(to bottom, #161616, transparent);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .logo {
@@ -41,166 +53,135 @@
 .logo-icon {
     width: 40px;
     height: 40px;
-    /* 渐变图标更醒目 */
-    background: linear-gradient(135deg, #10b981, #06b6d4);
-    border-radius: 10px;
+    background: linear-gradient(to bottom right, #10b981, #06b6d4);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
     color: #000;
     font-weight: bold;
-    /* 轻微发光效果 */
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
 }
 
 .logo-text h1 {
     font-size: 16px;
     font-weight: 700;
-    color: #f9fafb;
+    color: var(--text-primary);
 }
 
 .logo-text p {
     font-size: 10px;
-    color: #6b7280;
+    color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
 }
 
-/* 侧边栏导航区域 - 可滚动 */
 .sidebar-nav {
     flex: 1;
     padding: 24px 16px;
     overflow-y: auto;
-    /* 滚动条美化 */
-    scrollbar-width: thin;
-    scrollbar-color: #374151 #111111;
-}
-
-/* 导航滚动条自定义 */
-.sidebar-nav::-webkit-scrollbar {
-    width: 4px;
-}
-.sidebar-nav::-webkit-scrollbar-track {
-    background: #111111;
-}
-.sidebar-nav::-webkit-scrollbar-thumb {
-    background-color: #374151;
-    border-radius: 4px;
 }
 
 .nav-label {
     font-size: 11px;
     font-weight: 600;
-    color: #4b5563;
+    color: var(--text-muted);
     margin-bottom: 12px;
     padding: 0 12px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-/* 导航项样式 - hover/active 增强 */
 .nav-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 11px 14px;
-    color: #9ca3af;
+    padding: 10px 12px;
+    color: var(--text-secondary);
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 14px;
-    transition: all 0.25s ease;
+    transition: all 0.2s;
     margin-bottom: 4px;
-    position: relative;
-    overflow: hidden;
 }
 
-/* 导航项hover渐变背景 */
 .nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: #ffffff;
-    transform: translateX(2px);
+    background-color: var(--hover-color);
+    color: var(--text-primary);
 }
 
-/* 激活项样式 - 带左侧指示条 */
 .nav-item.active {
     background-color: rgba(16, 185, 129, 0.1);
     color: #10b981;
-}
-.nav-item.active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 3px;
-    background: linear-gradient(to bottom, #10b981, #06b6d4);
-    border-radius: 0 2px 2px 0;
 }
 
 .nav-item .icon {
     width: 20px;
     height: 20px;
-    flex-shrink: 0;
 }
 
-/* 侧边栏底部 - 用户信息+退出按钮 */
 .sidebar-footer {
     margin-top: auto;
     padding: 20px 16px;
-    border-top: 1px solid #2a2a2a;
-    /* 底部渐变背景 */
-    background: linear-gradient(to top, #0d0d0d, transparent);
+    border-top: 1px solid var(--border-color);
 }
 
 .sidebar-user-info {
-    padding: 14px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 10px;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
     margin-bottom: 12px;
-    /* 轻微边框发光 */
-    border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .user-name {
     font-size: 14px;
     font-weight: 600;
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .user-email {
     font-size: 12px;
-    color: #6b7280;
+    color: var(--text-muted);
     word-break: break-all;
 }
 
-/* 退出按钮样式优化 */
+.theme-toggle-btn {
+    width: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    color: var(--text-secondary);
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.25s ease;
+    margin-bottom: 12px;
+}
+.theme-toggle-btn:hover {
+    background-color: var(--hover-color);
+    color: var(--text-primary);
+}
+
 .signout-btn {
     width: 100%;
     background: transparent;
     color:#ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(203, 0, 0, 0.2);
     cursor: pointer;
-    border-radius: 10px;
-    padding: 11px 14px;
-    transition: all 0.25s ease;
 }
 
 .signout-btn:hover {
     background-color: rgba(239, 68, 68, 0.1);
     color: #ef4444;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.1);
 }
 
-/* 主内容区域样式 */
 .main-content {
     flex: 1;
     padding: 32px;
     overflow-y: auto;
-    /* 双渐变背景提升质感 */
-    background: radial-gradient(circle at top left, rgba(16, 185, 129, 0.03) 0%, transparent 60%),
-                radial-gradient(circle at bottom right, rgba(6, 182, 212, 0.03) 0%, transparent 60%);
+    background: var(--bg-primary);
     min-height: 100vh;
 }
 
@@ -214,38 +195,35 @@
 .page-header h2 {
     font-size: 24px;
     font-weight: 700;
-    color: #f9fafb;
+    color: var(--text-primary);
 }
 
 .page-header p {
-    color: #9ca3af;
+    color: var(--text-secondary);
 }
 
-/* 移动端汉堡按钮 - 左上角优化版 */
 .mobile-menu-btn {
     position: fixed;
     top: 16px;
     left: 16px;
     z-index: 999;
-    background-color: #1a1a1a;
-    border: 1px solid #333333;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
     border-radius: 10px;
     width: 44px;
     height: 44px;
     padding: 0;
-    color: #f3f4f6;
+    color: var(--text-primary);
     cursor: pointer;
     display: none;
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .mobile-menu-btn:hover {
-    background-color: #2a2a2a;
+    background-color: var(--hover-color);
     transform: scale(1.05);
-    border-color: #444444;
 }
 
 .mobile-menu-btn .icon {
@@ -254,7 +232,6 @@
     stroke-width: 2.5;
 }
 
-/* 移动端侧边栏遮罩层 */
 .sidebar-overlay {
     position: fixed;
     top: 0;
@@ -272,7 +249,6 @@
     animation: fadeIn 0.3s ease;
 }
 
-/* 侧边栏展开/淡入动画 */
 .sidebar.open {
     left: 0;
     animation: slideIn 0.3s ease;
@@ -288,7 +264,6 @@
     to { opacity: 1; }
 }
 
-/* 响应式适配 - 768px以下 */
 @media (max-width: 768px) {
     .sidebar {
         position: fixed;
@@ -311,7 +286,6 @@
         padding-left: 20px;
     }
 
-    /* 侧边栏展开时按钮右移 */
     .sidebar.open + .main-content .mobile-menu-btn {
         left: 272px;
     }
@@ -326,7 +300,6 @@
     }
 }
 
-/* 小屏手机适配（375px以下） */
 @media (max-width: 375px) {
     .mobile-menu-btn {
         top: 12px;
@@ -340,11 +313,10 @@
     }
 }
 
-/* 页面页脚样式 */
 .page-footer {
     margin-top: 48px;
     padding: 32px 0 24px;
-    border-top: 1px solid #2a2a2a;
+    border-top: 1px solid var(--border-color);
 }
 
 .footer-content {
@@ -362,13 +334,13 @@
 
 .footer-section p {
     font-size: 13px;
-    color: #9ca3af;
+    color: var(--text-secondary);
     line-height: 1.6;
 }
 
 .footer-copy {
     text-align: center;
     font-size: 12px;
-    color: #6b7280;
+    color: var(--text-muted);
     margin-top: 8px;
 }
