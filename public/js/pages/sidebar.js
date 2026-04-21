@@ -1,34 +1,77 @@
 import { getCurrentUser, signOut, onAuthChange } from '../firebase/auth.js';
 
+// 初始化移动端菜单交互
 function initializeMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const sidebar = document.getElementById('sidebar');
-    const overlay = document.querySelector('.sidebar-overlay');
+    
+    // 创建遮罩层（如果不存在）
+    let overlay = document.querySelector('.sidebar-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+    }
 
     if (!menuBtn || !sidebar) return;
 
-    menuBtn.addEventListener('click', () => {
+    // 点击汉堡按钮切换侧边栏
+    menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // 防止事件冒泡
         sidebar.classList.toggle('open');
-        if (overlay) overlay.classList.toggle('active');
+        overlay.classList.toggle('active');
+        // 切换按钮图标（汉堡 ↔ 关闭）
+        menuBtn.innerHTML = sidebar.classList.contains('open') 
+            ? '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'
+            : '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+        
+        // 禁止/允许页面滚动
+        document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
     });
 
-    if (overlay) {
-        overlay.addEventListener('click', () => {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
-        });
-    }
+    // 点击遮罩层关闭侧边栏
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        // 恢复汉堡图标
+        menuBtn.innerHTML = '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+        document.body.style.overflow = ''; // 恢复滚动
+    });
+
+    // 点击侧边栏内部链接时关闭侧边栏（移动端）
+    const navLinks = sidebar.querySelectorAll('.nav-item');
+    navLinks.forEach(link => {
+        if (link.tagName === 'A') {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                    menuBtn.innerHTML = '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+    });
 }
 
+// 渲染侧边栏
 document.addEventListener('DOMContentLoaded', () => {
     const sidebarContainer = document.getElementById('sidebar-container');
     if (!sidebarContainer) return;
 
-    // Aguardar estado do auth antes de renderizar sidebar
+    // 监听认证状态变化
     onAuthChange((user) => {
-        if (!user) return; // não renderiza sidebar se não estiver logado
+        if (!user) {
+            // 未登录时隐藏侧边栏容器
+            sidebarContainer.style.display = 'none';
+            return;
+        }
+
+        // 显示侧边栏容器
+        sidebarContainer.style.display = 'block';
         const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
         
+        // 渲染侧边栏HTML
         sidebarContainer.innerHTML = `
             <aside class="sidebar" id="sidebar">
                 <div class="sidebar-header">
@@ -79,7 +122,21 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>
         `;
 
-        document.getElementById('signout-btn')?.addEventListener('click', signOut);
+        // 绑定退出登录事件
+        const signoutBtn = document.getElementById('signout-btn');
+        if (signoutBtn) {
+            signoutBtn.addEventListener('click', async () => {
+                try {
+                    await signOut();
+                    // 退出后跳转到登录页（根据你的项目调整路径）
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('Sign out error:', error);
+                }
+            });
+        }
+
+        // 初始化移动端菜单交互
         initializeMobileMenu();
     });
 });
