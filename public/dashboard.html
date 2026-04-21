@@ -55,23 +55,35 @@
             </div>
 
             <div class="overview-grid">
-                <div class="card">
-                    <h4>Overview</h4>
-                    <div class="overview-stats">
-                        <div class="overview-item">
-                            <div class="overview-circle teal"><span id="total-transactions">0</span></div>
-                            <p>Transactions</p>
-                        </div>
-                        <div class="overview-item">
-                            <div class="overview-circle green"><span id="income-transactions">0</span></div>
-                            <p>Income</p>
-                        </div>
-                        <div class="overview-item">
-                            <div class="overview-circle red"><span id="expense-transactions">0</span></div>
-                            <p>Expenses</p>
-                        </div>
-                    </div>
+            <div class="card overview-dark-card">
+                <div class="overview-header">
+                <h4>Overview</h4>
+                <span class="overview-month" id="overview-current-month"></span>
                 </div>
+
+                <div class="overview-top-stats">
+                <div class="overview-stat">
+                    <span class="stat-number" id="total-transactions">0</span>
+                    <p>Transaction</p>
+                </div>
+                <div class="overview-stat">
+                    <span class="stat-number" id="income-transactions">0</span>
+                    <p>Income</p>
+                </div>
+                <div class="overview-stat">
+                    <span class="stat-number" id="expense-transactions">0</span>
+                    <p>Outcome</p>
+                </div>
+                </div>
+
+                <div class="overview-calendar">
+                <div class="calendar-weekdays">
+                    <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                </div>
+                <!-- 下面这个容器是 JS 自动生成日期用的 -->
+                <div class="calendar-dates" id="calendar-dates-container"></div>
+                </div>
+            </div>
                 <div class="card">
                     <h4>Financial Health</h4>
                     <div class="health-stats">
