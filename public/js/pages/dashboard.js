@@ -1,4 +1,3 @@
-// ======================== DASHBOARD PAGE ========================
 import { auth } from '../firebase/auth.js';
 import { getUserIncomesFromCache, getUserExpensesFromCache, loadInitialCache } from '../api/mymoney.js';
 import { formatCurrency, formatDate, getTransactionIcon } from '../modules/helpers.js';
@@ -109,7 +108,6 @@ function updateDashboard() {
 
     updateRecentTransactions();
 
-    // 👇 新增：数据更新后自动渲染动态日历
     renderTransactionCalendar();
 }
 
@@ -141,13 +139,10 @@ function updateRecentTransactions() {
     `).join('');
 }
 
-// ======================== 新增：动态日历核心功能 ========================
-// 获取月份名称
 function getMonthName(date) {
     return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 }
 
-// 渲染日历 + 标记收支日期
 function renderTransactionCalendar() {
     const today = new Date();
     const currentYear = today.getFullYear();
@@ -155,17 +150,14 @@ function renderTransactionCalendar() {
     const container = document.getElementById('calendar-dates-container');
     const monthLabel = document.getElementById('overview-current-month');
 
-    // 更新顶部月份文字
     monthLabel.textContent = getMonthName(today);
     container.innerHTML = '';
 
-    // 筛选当前月份的所有交易
     const currentMonthTransactions = transactions.filter(t => {
         const tDate = new Date(t.date);
         return tDate.getFullYear() === currentYear && tDate.getMonth() === currentMonth;
     });
 
-    // 记录日期的收支状态
     const transactionMap = {};
     currentMonthTransactions.forEach(t => {
         const day = new Date(t.date).getDate();
@@ -174,26 +166,22 @@ function renderTransactionCalendar() {
         if (t.type === 'expense') transactionMap[day].expense = true;
     });
 
-    // 生成日历基础
     const firstDay = new Date(currentYear, currentMonth, 1);
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
     const daysInMonth = lastDay.getDate();
     const firstWeekDay = firstDay.getDay();
 
-    // 填充前置空白日期
     for (let i = 0; i < firstWeekDay; i++) {
         const empty = document.createElement('span');
         empty.className = 'date-item empty';
         container.appendChild(empty);
     }
 
-    // 生成当月日期 + 收支标记
     for (let day = 1; day <= daysInMonth; day++) {
         const dateEl = document.createElement('span');
         dateEl.className = 'date-item';
         dateEl.textContent = day;
 
-        // 标记颜色：收入=青色，支出=红色
         const txData = transactionMap[day];
         if (txData) {
             if (txData.income) dateEl.classList.add('income');

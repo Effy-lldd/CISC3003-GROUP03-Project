@@ -1,4 +1,3 @@
-// ======================== REPORTS PAGE ========================
 import { auth } from '../firebase/auth.js';
 import { getUserIncomesFromCache, getUserExpensesFromCache, loadInitialCache } from '../api/mymoney.js';
 import { formatCurrency } from '../modules/helpers.js';

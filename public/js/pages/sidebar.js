@@ -14,7 +14,7 @@ function initializeMobileMenu() {
     if (!menuBtn || !sidebar) return;
 
     menuBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // 防止事件冒泡
+        e.stopPropagation();
         sidebar.classList.toggle('open');
         overlay.classList.toggle('active');
 
@@ -31,7 +31,7 @@ function initializeMobileMenu() {
         overlay.classList.remove('active');
 
         menuBtn.innerHTML = '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
-        document.body.style.overflow = ''; // 恢复滚动
+        document.body.style.overflow = ''
     });
 
     const navLinks = sidebar.querySelectorAll('.nav-item');

@@ -1,4 +1,3 @@
-// ======================== CATEGORIES PAGE ========================
 import { auth } from '../firebase/auth.js';
 import { getUserIncomesFromCache, getUserExpensesFromCache, loadInitialCache } from '../api/mymoney.js';
 import { formatCurrency } from '../modules/helpers.js';
@@ -12,10 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (user) {
             currentUser = user;
             
-            // Garantir que cache está carregado
             await loadInitialCache(currentUser.email);
             
-            // Carregar transações do cache
             await loadTransactionsFromCache();
             updateCategories();
         } else {
@@ -24,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// NOVA FUNÇÃO: Carrega transações DO CACHE
 async function loadTransactionsFromCache() {
     const userEmail = currentUser.email;
     
