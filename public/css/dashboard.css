@@ -440,7 +440,7 @@
 }
 
 /* Responsive Mobile Styles */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .overview-grid { grid-template-columns: 1fr !important;}
     .stat-card { padding: 20px; }
     .card { padding: 24px; }
@@ -492,7 +492,7 @@
     font-size: 0.85rem;
 }
 
-/* 日历组件 */
+
 .overview-calendar {
     margin-top: 1rem;
 }
