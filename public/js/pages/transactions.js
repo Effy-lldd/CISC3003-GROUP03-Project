@@ -1,4 +1,3 @@
-// ======================== TRANSACTIONS PAGE ========================
 import { auth } from '../firebase/auth.js';
 import { 
     getUserIncomesFromCache, 
@@ -22,10 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
             currentUser = user;
             console.log('User logged in:', currentUser.email);
             
-            // Garantir que cache está carregado
             await loadInitialCache(currentUser.email);
             
-            // Carregar transações do cache
             await loadTransactionsFromCache();
             initializeTransactionForm();
             initializeFilters();
@@ -36,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// MODIFICADA: Carrega transações DO CACHE (não da API)
 async function loadTransactionsFromCache() {
     const userEmail = currentUser.email;
     const userName = userEmail.split('@')[0];
@@ -77,7 +73,6 @@ async function loadTransactionsFromCache() {
     }
 }
 
-// MODIFICADA: Usa função com cache automático
 async function addTransactionToAPI(transaction) {
     const userEmail = currentUser.email;
     const userName = userEmail.split('@')[0];
@@ -278,7 +273,6 @@ function updateTransactionsTable() {
     });
 }
 
-// MODIFICADA: Usa função com cache automático
 async function deleteTransactionFromAPI(id, type) {
     let result;
     

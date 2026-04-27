@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebarContainer = document.getElementById('sidebar-container');
     if (!sidebarContainer) return;
 
-    // Aguardar estado do auth antes de renderizar sidebar
     onAuthChange((user) => {
         if (!user) return; // não renderiza sidebar se não estiver logado
         const currentPage = window.location.pathname.split('/').pop().replace('.html', '');

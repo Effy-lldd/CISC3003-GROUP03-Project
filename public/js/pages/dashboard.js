@@ -12,10 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (user) {
             currentUser = user;
             
-            // Carrega cache uma única vez
             await loadInitialCache(currentUser.email);
             
-            // Carrega dados do cache (0 API calls)
             await loadTransactionsFromCache();
             updateDashboard();
         } else {
@@ -24,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// NOVA FUNÇÃO: Carrega transações DO CACHE (sem chamar API)
 async function loadTransactionsFromCache() {
     const userEmail = currentUser.email;
     const userName = userEmail.split('@')[0];
@@ -77,7 +74,7 @@ function showLoading() {
 }
 
 function hideLoading() {
-    // updateDashboard vai preencher os dados
+    
 }
 
 function updateDashboard() {

@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// NOVA FUNÇÃO: Carrega transações DO CACHE
 async function loadTransactionsFromCache() {
     const userEmail = currentUser.email;
     
@@ -126,7 +125,6 @@ function updateMonthlyBreakdown() {
         chartCard.style.display = 'none';
     }
 
-    // Table
     const tbody = document.getElementById('monthly-table-body');
 
     if (sortedData.length === 0) {

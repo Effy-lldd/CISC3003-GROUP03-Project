@@ -1,4 +1,3 @@
-// login.js
 import { auth } from '../firebase/auth.js';
 import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
