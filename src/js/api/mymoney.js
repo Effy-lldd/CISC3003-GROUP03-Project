@@ -90,6 +90,9 @@ export async function forceRefreshCache(userEmail) {
 export async function addIncomeAndUpdateCache(incomeData) {
     const result = await addIncome(incomeData);
     if (result.success && result.data) {
+        if (!result.data.category && incomeData.category) {
+            result.data.category = incomeData.category;
+        }
         cachedIncomes.push(result.data);
         persistCache();
         console.log(`📦 Cache updated: +1 income (total: ${cachedIncomes.length})`);
@@ -100,6 +103,9 @@ export async function addIncomeAndUpdateCache(incomeData) {
 export async function addExpenseAndUpdateCache(expenseData) {
     const result = await addExpense(expenseData);
     if (result.success && result.data) {
+        if (!result.data.category && expenseData.category) {
+            result.data.category = expenseData.category;
+        }
         cachedExpenses.push(result.data);
         persistCache();
         console.log(`📦 Cache updated: +1 expense (total: ${cachedExpenses.length})`);

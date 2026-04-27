@@ -46,7 +46,7 @@ async function loadTransactionsFromCache() {
             id: inc._id,
             type: 'income',
             amount: inc.amount,
-            category: inc.category || 'Salary',
+            category: mapCategoryToFrontend(inc.category, 'income') || 'Salary',
             description: inc.description,
             date: inc.date.split('T')[0],
             method: 'API'
@@ -82,11 +82,13 @@ async function addTransactionToAPI(transaction) {
     let result;
     
     if (transaction.type === 'income') {
+        const categoryInPortuguese = mapCategoryToAPI(transaction.category, 'income');
         result = await addIncomeAndUpdateCache({
             user: userName,
             description: transaction.description,
             amount: transaction.amount,
-            date: transaction.date
+            date: transaction.date,
+            category: categoryInPortuguese 
         });
     } else {
         const categoryInPortuguese = mapCategoryToAPI(transaction.category, 'expense');
