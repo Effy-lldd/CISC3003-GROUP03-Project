@@ -249,7 +249,6 @@
     border-radius: 2px;
 }
 
-/* ===== 饼图容器样式微调 ===== */
 .pie-chart-container {
     display: flex;
     gap: 24px;
@@ -281,7 +280,7 @@
     filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
 }
 
-/* Chart.js 图例样式（注意：图例会渲染在 canvas 下方，因此需要调整其容器） */
+
 .pie-chart-card .chartjs-legend,
 .pie-chart-card > ul {
     display: flex;

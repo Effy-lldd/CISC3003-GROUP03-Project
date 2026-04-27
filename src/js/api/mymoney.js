@@ -65,7 +65,6 @@ export async function loadInitialCache(userEmail) {
     const incomesResult = await request('/income');
     if (incomesResult.ok) {
         let allIncomes = incomesResult.data.data.filter(item => item.user === userName);
-        // 保留有效 id 的记录（_id 或 id 存在且非 undefined）
         cachedIncomes = allIncomes.filter(item => item._id || item.id);
         const invalidCount = allIncomes.length - cachedIncomes.length;
         if (invalidCount > 0) console.warn(`⚠️ Skipped ${invalidCount} incomes without valid _id`);
@@ -509,4 +508,92 @@ export async function getUserStatement(userEmail, year, month) {
             categoryExpenses
         }
     };
+}
+
+
+// ========== GOALS ==========
+let cachedGoals = [];
+const CACHE_KEY_GOALS = 'finomic_cache_goals';
+
+function persistGoalsCache() {
+    localStorage.setItem(CACHE_KEY_GOALS, JSON.stringify(cachedGoals));
+}
+
+function loadPersistedGoalsCache() {
+    const savedGoals = localStorage.getItem(CACHE_KEY_GOALS);
+    if (savedGoals) {
+        cachedGoals = JSON.parse(savedGoals);
+        console.log(`📦 Goals cache restored: ${cachedGoals.length} goals`);
+        return true;
+    }
+    return false;
+}
+
+// 初始化 goals（从 localStorage 加载）
+export function initGoalsCache() {
+    loadPersistedGoalsCache();
+}
+
+// 获取所有 goals（可过滤 user）
+export function getUserGoalsFromCache(userEmail) {
+    const userName = userEmail.split('@')[0];
+    const userGoals = cachedGoals.filter(g => g.user === userName);
+    return { success: true, data: userGoals, fromCache: true };
+}
+
+// 添加 goal（同时写入 localStorage）
+export async function addGoal(goalData) {
+    // 模拟后端返回的 ID
+    const newGoal = {
+        ...goalData,
+        _id: Date.now().toString(),   // 临时 ID
+        createdAt: new Date().toISOString()
+    };
+    cachedGoals.push(newGoal);
+    persistGoalsCache();
+    return { success: true, data: newGoal };
+}
+
+// 更新 goal
+export async function updateGoal(id, goalData) {
+    const index = cachedGoals.findIndex(g => g._id === id);
+    if (index !== -1) {
+        cachedGoals[index] = { ...cachedGoals[index], ...goalData };
+        persistGoalsCache();
+        return { success: true, data: cachedGoals[index] };
+    }
+    return { success: false, error: 'Goal not found' };
+}
+
+// 删除 goal
+export async function deleteGoal(id) {
+    const index = cachedGoals.findIndex(g => g._id === id);
+    if (index !== -1) {
+        cachedGoals.splice(index, 1);
+        persistGoalsCache();
+        return { success: true };
+    }
+    return { success: false, error: 'Goal not found' };
+}
+
+// 从 API 加载 goals（后续替换真实请求）
+export async function loadGoalsFromAPI(userEmail) {
+    const userName = userEmail.split('@')[0];
+    // 尝试从 API 获取（后端暂无，会失败）
+    try {
+        const result = await request('/goals?user=' + userName);
+        if (result.ok && result.data && result.data.data) {
+            cachedGoals = result.data.data.filter(g => g.user === userName);
+            persistGoalsCache();
+            console.log(`📦 Loaded ${cachedGoals.length} goals from API`);
+            return;
+        }
+    } catch (e) {
+        console.warn('Goals API not available, falling back to localStorage');
+    }
+    // 降级：从 localStorage 读取并过滤当前用户
+    loadPersistedGoalsCache();
+    cachedGoals = cachedGoals.filter(g => g.user === userName);
+    persistGoalsCache();  // 保存过滤后的数据，避免旧数据残留
+    console.log(`📦 Loaded ${cachedGoals.length} goals from localStorage (filtered by user)`);
 }
