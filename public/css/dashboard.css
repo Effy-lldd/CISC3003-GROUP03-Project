@@ -441,22 +441,22 @@
 
 /* Responsive Mobile Styles */
 @media (max-width: 768px) {
-    .overview-grid { grid-template-columns: 1fr; }
+    .overview-grid { grid-template-columns: 1fr !important;}
     .stat-card { padding: 20px; }
     .card { padding: 24px; }
     .overview-stats { gap: 16px; }
     .overview-circle { width: 64px; height: 64px; }
 }
 
-/* ========== 深色Overview卡片样式（匹配图片UI） ========== */
+
 .overview-dark-card {
-    background-color: #1a1a1a !important; /* 深色卡片背景 */
-    color: #ffffff !important; /* 白色文字 */
+    background-color: #1a1a1a !important;
+    color: #ffffff !important; 
     border-radius: 12px;
     padding: 1.5rem;
 }
 
-/* 标题行：Overview + 月份 */
+
 .overview-header {
     display: flex;
     justify-content: space-between;
@@ -473,7 +473,7 @@
     font-size: 0.9rem;
 }
 
-/* 顶部三个数据 */
+
 .overview-top-stats {
     display: flex;
     justify-content: space-between;
@@ -521,22 +521,22 @@
     cursor: default;
 }
 .date-item.active {
-    background-color: #ffb79f; /* 高亮日期的浅橙色背景，和图片一致 */
-    color: #1a1a1a; /* 深色文字，保证可读性 */
+    background-color: #ffb79f; 
+    color: #1a1a1a; 
     font-weight: 500;
 }
 .date-item:hover:not(.active) {
     background-color: #2a2a2a;
 }
 
-/* 适配你原来的网格布局 */
 .overview-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 24px;
+    margin-bottom: 40px;
 }
 
-/* 深色 Overview 卡片 */
+
 .overview-dark-card {
   background: #151823;
   color: #fff;
@@ -569,7 +569,7 @@
   color: #8a8d99;
 }
 
-/* 日历布局 */
+
 .overview-calendar {
   width: 100%;
 }
@@ -600,7 +600,7 @@
   background: transparent;
 }
 
-/* 标记圆点：收入青色 / 支出红色 */
+
 .date-item.income::after {
   content: '';
   position: absolute;
@@ -608,7 +608,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #98e5db; /* 青色 */
+  background: #98e5db; 
 }
 .date-item.expense::after {
   content: '';
@@ -617,7 +617,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #eeb58f; /* 红色 */
+  background: #eeb58f; 
 }
 /* 同一天既有收入又有支出 */
 .date-item.income.expense::after {
