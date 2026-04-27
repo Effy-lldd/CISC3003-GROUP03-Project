@@ -6,7 +6,6 @@
     margin-bottom: 40px;
 }
 
-/* Statistic Card - Uses theme variables for light/dark mode */
 .stat-card {
     background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
@@ -84,7 +83,6 @@
     margin-bottom: 16px;
 }
 
-/* 🔥 唯一修改：修复 Total Income/Expenses 文字颜色，适配双模式 */
 .stat-header p {
     color: var(--text-primary);
 }

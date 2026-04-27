@@ -1,4 +1,3 @@
-/* ======================== REPORTS PAGE STYLES ======================== */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -90,7 +89,7 @@
     height: 220px;
     padding: 0 8px;
     margin: 16px 0;
-    min-width: 0; /* 修复flex容器溢出问题 */
+    min-width: 0;
 }
 
 .chart-bar-group {
@@ -99,7 +98,7 @@
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    min-width: 40px; /* 确保最小宽度 */
+    min-width: 40px;
 }
 
 .chart-bars {
@@ -148,7 +147,7 @@
     justify-content: center;
     margin-top: 8px;
     padding-bottom: 8px;
-    flex-wrap: wrap; /* 适配小屏幕 */
+    flex-wrap: wrap;
 }
 
 .legend-item {
@@ -169,7 +168,6 @@
     color: #9ca3af;
 }
 
-/* Table Styles - 彻底修复对齐问题 */
 .table-container {
     overflow-x: auto;
     border-radius: 12px;
@@ -181,7 +179,7 @@
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    table-layout: fixed; /* 强制列宽按比例分配，不受内容影响 */
+    table-layout: fixed;
     min-width: 600px;
 }
 
@@ -190,7 +188,6 @@
     border-bottom: 1px solid #2a2a2a;
 }
 
-/* 表头和表体的内边距、对齐方式完全统一 */
 .transactions-table th,
 .transactions-table td {
     padding: 16px 24px;
@@ -200,32 +197,26 @@
     text-overflow: ellipsis;
 }
 
-/* 给每一列固定宽度，严格对应5列结构 */
-/* 第1列：Month 左对齐 */
 .transactions-table th:nth-child(1),
 .transactions-table td:nth-child(1) {
     width: 25%;
     text-align: left;
 }
-/* 第2列：Income 右对齐 */
 .transactions-table th:nth-child(2),
 .transactions-table td:nth-child(2) {
     width: 20%;
     text-align: right;
 }
-/* 第3列：Expenses 右对齐 */
 .transactions-table th:nth-child(3),
 .transactions-table td:nth-child(3) {
     width: 20%;
     text-align: right;
 }
-/* 第4列：Net 右对齐 */
 .transactions-table th:nth-child(4),
 .transactions-table td:nth-child(4) {
     width: 20%;
     text-align: right;
 }
-/* 第5列：Savings Rate 右对齐 */
 .transactions-table th:nth-child(5),
 .transactions-table td:nth-child(5) {
     width: 15%;
@@ -283,7 +274,6 @@
     background-color: #eeb58f;
 }
 
-/* 卡片通用样式 */
 .card {
     background-color: #1a1a1a;
     border: 1px solid #2a2a2a;
@@ -313,7 +303,7 @@
     .chart-container {
         height: 200px;
         gap: 8px;
-        overflow-x: auto; /* 图表横向滚动 */
+        overflow-x: auto;
         padding-bottom: 16px;
     }
 
@@ -360,7 +350,6 @@
     }
 }
 
-/* 加载状态样式（预留） */
 .loading {
     display: flex;
     align-items: center;
