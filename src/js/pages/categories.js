@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             await loadTransactionsFromCache();
             updateCategories();
+            drawPieCharts();
         } else {
             window.location.href = 'login.html';
         }
@@ -136,4 +137,43 @@ function updateCategories() {
             </div>
         `).join('');
     }
+}
+
+
+async function drawPieCharts() {
+    const incomeCanvas = document.getElementById('incomePieChart');
+    const expenseCanvas = document.getElementById('expensePieChart');
+    if (!incomeCanvas || !expenseCanvas) return;
+
+   
+    const incomeMap = {};
+    const expenseMap = {};
+    transactions.forEach(t => {
+        if (t.type === 'income') {
+            incomeMap[t.category] = (incomeMap[t.category] || 0) + t.amount;
+        } else {
+            expenseMap[t.category] = (expenseMap[t.category] || 0) + t.amount;
+        }
+    });
+
+    if (window.incomeChart) window.incomeChart.destroy();
+    if (window.expenseChart) window.expenseChart.destroy();
+
+    window.incomeChart = new Chart(incomeCanvas, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(incomeMap),
+            datasets: [{ data: Object.values(incomeMap), backgroundColor: ['#ff638544','#36a3eb51','#ffcf5671','#4bc0c05b','#9966ff51','#ffa04051'] }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    window.expenseChart = new Chart(expenseCanvas, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(expenseMap),
+            datasets: [{ data: Object.values(expenseMap), backgroundColor: ['#ffa04051','#9966ff51','#4bc0c05b','#ffcf5671','#36a3eb51','#ff638544'] }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
 }

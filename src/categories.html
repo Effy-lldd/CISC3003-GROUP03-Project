@@ -11,7 +11,8 @@
     import './js/pages/auth-guard.js';
     import './js/pages/sidebar.js';
     import './js/pages/categories.js';
-</script>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <div class="app-container">
@@ -25,22 +26,32 @@
                 <p>Analyze your spending and income by category</p>
             </div>
 
-            <div class="stats-grid">
+            <div class="stats-grid" style="grid-template-columns: 1fr;">
                 <div class="stat-card">
                     <div class="stat-header">
                         <svg class="icon teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
                         <p>Total Categories</p>
                     </div>
-                    <h3 id="total-categories">0</h3>
-                    <p class="stat-info" id="categories-breakdown">0 expense, 0 income</p>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <svg class="icon red" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
-                        <p>Top Expense Category</p>
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <h3 id="total-categories">0</h3>
+                            <p class="stat-info" id="categories-breakdown">0 expense, 0 income</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <h3 id="top-category" style="margin: 0;">N/A</h3>
+                            <p style="margin: 0; font-size: 0.9rem; color: #6b7280;">Top Expense Category</p><p class="stat-info red" id="top-category-amount">$0.00</p>
+                        </div>
                     </div>
-                    <h3 id="top-category">N/A</h3>
-                    <p class="stat-info red" id="top-category-amount">$0.00</p>
+                    <div style="display: flex; gap: 24px; margin-bottom: 32px;">
+                        <div class="card" style="flex: 1; padding: 20px;">
+                            <h4>Income Ratio</h4>
+                            <canvas id="incomePieChart" width="400" height="400" style="max-width:100%; height:auto;"></canvas>
+                        </div>
+                        <div class="card" style="flex: 1; padding: 20px;">
+                            <h4>Expense Ratio</h4>
+                            <canvas id="expensePieChart" width="400" height="400" style="max-width:100%; height:auto;"></canvas>
+                        </div>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">

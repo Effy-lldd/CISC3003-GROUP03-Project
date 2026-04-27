@@ -249,6 +249,74 @@
     border-radius: 2px;
 }
 
+/* ===== 饼图容器样式微调 ===== */
+.pie-chart-container {
+    display: flex;
+    gap: 24px;
+    margin-top: 32px;
+}
+
+.pie-chart-card {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.01);
+    border-radius: 20px;
+    padding: 20px 16px;
+    transition: all 0.3s ease;
+}
+
+.pie-chart-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #e5e7eb;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.pie-chart-card canvas {
+    display: block;
+    margin: 0 auto;
+    max-width: 260px;
+    height: auto;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+}
+
+/* Chart.js 图例样式（注意：图例会渲染在 canvas 下方，因此需要调整其容器） */
+.pie-chart-card .chartjs-legend,
+.pie-chart-card > ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+.pie-chart-card .chartjs-legend li,
+.pie-chart-card > ul li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 4px 10px;
+    border-radius: 30px;
+    backdrop-filter: blur(4px);
+}
+
+.pie-chart-card .chartjs-legend li span,
+.pie-chart-card > ul li span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+
+
 @media (max-width: 768px) {
     .stats-grid { grid-template-columns: 1fr; }
     .stat-card { padding: 20px; }
