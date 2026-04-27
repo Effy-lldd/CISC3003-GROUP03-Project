@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Full API Test - My Money</title>
+    <style>
+        body { font-family: monospace; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        h1, h2, h3 { color: #333; }
+        button { padding: 8px 12px; margin: 5px; font-size: 13px; cursor: pointer; background: #4ec9b0; border: none; border-radius: 4px; }
+        button:hover { background: #3da896; }
+        .delete-btn { background: #ff6b6b; color: white; }
+        .delete-btn:hover { background: #e05555; }
+        .section { 
+            background: #f8f9fa; 
+            border-radius: 8px; 
+            padding: 15px; 
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 11px; max-height: 300px; overflow-y: auto; }
+        .success { color: #4ec9b0; }
+        .error { color: #ff6b6b; }
+        .info { color: #569cd6; }
+        .log-container { 
+            background: #1e1e1e; 
+            color: #d4d4d4; 
+            padding: 15px; 
+            border-radius: 8px; 
+            height: 400px; 
+            overflow-y: auto; 
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .log-entry { margin-bottom: 5px; }
+        .flex { display: flex; gap: 10px; flex-wrap: wrap; }
+        .status-badge { 
+            display: inline-block; 
+            padding: 2px 8px; 
+            border-radius: 12px; 
+            font-size: 11px;
+            background: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <h1>💰 My Money API - Full Endpoint Test</h1>
+    <p>Testing all endpoints with consistent user: <strong id="user-name">FinomicTestUser</strong></p>
+
+    <!-- Control Panel -->
+    <div class="section">
+        <h3>🎮 Control Panel</h3>
+        <div class="flex">
+            <button id="clear-logs">🗑️ Clear Logs</button>
+            <button id="run-all-tests">🚀 RUN ALL TESTS (Sequential)</button>
+            <button id="clean-all-data" class="delete-btn">⚠️ DELETE ALL TEST DATA</button>
+        </div>
+    </div>
+
+    <!-- Income Section -->
+    <div class="section">
+        <h3>📈 INCOMES (Receitas)</h3>
+        <div class="flex">
+            <button id="income-list">1. GET /income - List All</button>
+            <button id="income-add">2. POST /income - Add Sample</button>
+            <button id="income-by-month">3. GET /income/:year/:month - Get by Month</button>
+            <button id="income-by-id">4. GET /income/:id - Get by ID</button>
+            <button id="income-update">5. PUT /income/:id - Update</button>
+            <button id="income-delete">6. DELETE /income/:id - Delete</button>
+        </div>
+    </div>
+
+    <!-- Expenses Section -->
+    <div class="section">
+        <h3>📉 EXPENSES (Despesas)</h3>
+        <div class="flex">
+            <button id="expense-list">7. GET /expenses - List All</button>
+            <button id="expense-add">8. POST /expenses - Add Sample</button>
+            <button id="expense-by-month">9. GET /expenses/:year/:month - Get by Month</button>
+            <button id="expense-by-id">10. GET /expenses/:id - Get by ID</button>
+            <button id="expense-update">11. PUT /expenses/:id - Update</button>
+            <button id="expense-delete">12. DELETE /expenses/:id - Delete</button>
+        </div>
+    </div>
+
+    <!-- Statement Section -->
+    <div class="section">
+        <h3>📊 STATEMENT (Extrato)</h3>
+        <div class="flex">
+            <button id="statement-current">13. GET /statement/:year/:month - Current Month</button>
+            <button id="statement-custom">GET /statement/:year/:month - Custom (2026/01)</button>
+        </div>
+    </div>
+
+    <!-- Log Output -->
+    <h3>📋 Activity Log:</h3>
+    <div id="log" class="log-container">
+        <div class="log-entry">Ready to test...</div>
+    </div>
+
+    <script type="module">
+        import { 
+            getAllIncomes, addIncome, getIncomesByMonth, getIncomeById, updateIncome, deleteIncome,
+            getAllExpenses, addExpense, getExpensesByMonth, getExpenseById, updateExpense, deleteExpense,
+            getMonthlyStatement
+        } from './js/api/mymoney.js';
+
+        const TEST_USER = "FinomicTestUser";
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+        
+        let lastIncomeId = null;
+        let lastExpenseId = null;
+        
+        const logContainer = document.getElementById('log');
+
+        function log(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            const timestamp = new Date().toLocaleTimeString();
+            
+            let color = '#d4d4d4';
+            if (type === 'success') color = '#4ec9b0';
+            if (type === 'error') color = '#ff6b6b';
+            if (type === 'warning') color = '#f4b942';
+            
+            entry.style.color = color;
+            entry.innerHTML = `[${timestamp}] ${message}`;
+            logContainer.appendChild(entry);
+            entry.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            console.log(message);
+        }
+
+        function logResponse(title, result) {
+            if (result.success) {
+                log(`✅ ${title}: Success`, 'success');
+                log(`   Data: ${JSON.stringify(result.data, null, 2)}`, 'info');
+                return true;
+            } else {
+                log(`❌ ${title}: Failed - ${result.error} (Status: ${result.status})`, 'error');
+                return false;
+            }
+        }
+
+        function clearLogs() {
+            logContainer.innerHTML = '<div class="log-entry">Logs cleared...</div>';
+            log('Logs cleared');
+        }
+
+        // ========== INCOME TESTS ==========
+        
+        document.getElementById('income-list').onclick = async () => {
+            log('📡 Testing GET /income');
+            const result = await getAllIncomes();
+            if (logResponse('GET /income', result)) {
+                const userIncomes = result.data.filter(i => i.user === TEST_USER);
+                log(`   Found ${userIncomes.length} incomes for user ${TEST_USER}`);
+                if (userIncomes.length > 0) {
+                    lastIncomeId = userIncomes[0]._id;
+                    log(`   📌 Last income ID saved: ${lastIncomeId}`);
+                }
+            }
+        };
+
+        document.getElementById('income-add').onclick = async () => {
+            log(`📡 Testing POST /income with user: ${TEST_USER}`);
+            const testIncome = {
+                user: TEST_USER,
+                description: `Test Income ${new Date().toLocaleTimeString()}`,
+                amount: Math.floor(Math.random() * 3000) + 1000,
+                date: new Date().toISOString().split('T')[0]
+            };
+            log(`   Data: ${JSON.stringify(testIncome)}`);
+            const result = await addIncome(testIncome);
+            if (logResponse('POST /income', result)) {
+                lastIncomeId = result.data._id;
+                log(`   📌 New income ID: ${lastIncomeId}`);
+            }
+        };
+
+        document.getElementById('income-by-month').onclick = async () => {
+            log(`📡 Testing GET /income/${currentYear}/${currentMonth}`);
+            const result = await getIncomesByMonth(currentYear, currentMonth);
+            logResponse(`GET /income/${currentYear}/${currentMonth}`, result);
+        };
+
+        document.getElementById('income-by-id').onclick = async () => {
+            if (!lastIncomeId) {
+                log('⚠️ No income ID available. Please add an income or list incomes first.', 'warning');
+                return;
+            }
+            log(`📡 Testing GET /income/${lastIncomeId}`);
+            const result = await getIncomeById(lastIncomeId);
+            logResponse(`GET /income/${lastIncomeId}`, result);
+        };
+
+        document.getElementById('income-update').onclick = async () => {
+            if (!lastIncomeId) {
+                log('⚠️ No income ID available. Please add an income or list incomes first.', 'warning');
+                return;
+            }
+            log(`📡 Testing PUT /income/${lastIncomeId}`);
+            const updatedIncome = {
+                user: TEST_USER,
+                description: `Updated Income ${new Date().toLocaleTimeString()}`,
+                amount: Math.floor(Math.random() * 3000) + 1000,
+                date: new Date().toISOString().split('T')[0]
+            };
+            log(`   New data: ${JSON.stringify(updatedIncome)}`);
+            const result = await updateIncome(lastIncomeId, updatedIncome);
+            logResponse(`PUT /income/${lastIncomeId}`, result);
+        };
+
+        document.getElementById('income-delete').onclick = async () => {
+            if (!lastIncomeId) {
+                log('⚠️ No income ID available. Please add an income or list incomes first.', 'warning');
+                return;
+            }
+            log(`📡 Testing DELETE /income/${lastIncomeId}`);
+            const result = await deleteIncome(lastIncomeId);
+            if (logResponse(`DELETE /income/${lastIncomeId}`, result)) {
+                lastIncomeId = null;
+                log('   📌 Income deleted, ID cleared');
+            }
+        };
+
+        // ========== EXPENSE TESTS ==========
+        
+        document.getElementById('expense-list').onclick = async () => {
+            log('📡 Testing GET /expenses');
+            const result = await getAllExpenses();
+            if (logResponse('GET /expenses', result)) {
+                const userExpenses = result.data.filter(e => e.user === TEST_USER);
+                log(`   Found ${userExpenses.length} expenses for user ${TEST_USER}`);
+                if (userExpenses.length > 0) {
+                    lastExpenseId = userExpenses[0]._id;
+                    log(`   📌 Last expense ID saved: ${lastExpenseId}`);
+                }
+            }
+        };
+
+        document.getElementById('expense-add').onclick = async () => {
+            log(`📡 Testing POST /expenses with user: ${TEST_USER}`);
+            const categories = ['Alimentação', 'Saúde', 'Moradia', 'Transporte', 'Educação', 'Lazer', 'Imprevistos', 'Outras'];
+            const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+            const testExpense = {
+                user: TEST_USER,
+                description: `Test Expense ${new Date().toLocaleTimeString()}`,
+                amount: Math.floor(Math.random() * 500) + 50,
+                date: new Date().toISOString().split('T')[0],
+                category: randomCategory
+            };
+            log(`   Data: ${JSON.stringify(testExpense)}`);
+            const result = await addExpense(testExpense);
+            if (logResponse('POST /expenses', result)) {
+                lastExpenseId = result.data._id;
+                log(`   📌 New expense ID: ${lastExpenseId}`);
+            }
+        };
+
+        document.getElementById('expense-by-month').onclick = async () => {
+            log(`📡 Testing GET /expenses/${currentYear}/${currentMonth}`);
+            const result = await getExpensesByMonth(currentYear, currentMonth);
+            logResponse(`GET /expenses/${currentYear}/${currentMonth}`, result);
+        };
+
+        document.getElementById('expense-by-id').onclick = async () => {
+            if (!lastExpenseId) {
+                log('⚠️ No expense ID available. Please add an expense or list expenses first.', 'warning');
+                return;
+            }
+            log(`📡 Testing GET /expenses/${lastExpenseId}`);
+            const result = await getExpenseById(lastExpenseId);
+            logResponse(`GET /expenses/${lastExpenseId}`, result);
+        };
+
+        document.getElementById('expense-update').onclick = async () => {
+            if (!lastExpenseId) {
+                log('⚠️ No expense ID available. Please add an expense or list expenses first.', 'warning');
+                return;
+            }
+            log(`📡 Testing PUT /expenses/${lastExpenseId}`);
+            const updatedExpense = {
+                user: TEST_USER,
+                description: `Updated Expense ${new Date().toLocaleTimeString()}`,
+                amount: Math.floor(Math.random() * 500) + 50,
+                date: new Date().toISOString().split('T')[0],
+                category: 'Outras'
+            };
+            log(`   New data: ${JSON.stringify(updatedExpense)}`);
+            const result = await updateExpense(lastExpenseId, updatedExpense);
+            logResponse(`PUT /expenses/${lastExpenseId}`, result);
+        };
+
+        document.getElementById('expense-delete').onclick = async () => {
+            if (!lastExpenseId) {
+                log('⚠️ No expense ID available. Please add an expense or list expenses first.', 'warning');
+                return;
+            }
+            log(`📡 Testing DELETE /expenses/${lastExpenseId}`);
+            const result = await deleteExpense(lastExpenseId);
+            if (logResponse(`DELETE /expenses/${lastExpenseId}`, result)) {
+                lastExpenseId = null;
+                log('   📌 Expense deleted, ID cleared');
+            }
+        };
+
+        // ========== STATEMENT TESTS ==========
+        
+        document.getElementById('statement-current').onclick = async () => {
+            log(`📡 Testing GET /statement/${currentYear}/${currentMonth}`);
+            const result = await getMonthlyStatement(currentYear, currentMonth);
+            if (logResponse(`GET /statement/${currentYear}/${currentMonth}`, result)) {
+                log(`   📊 Total Income: $${result.data.totalIncome}`, 'info');
+                log(`   📊 Total Expenses: $${result.data.totalExpenses}`, 'info');
+                log(`   📊 Monthly Balance: $${result.data.monthBalance}`, 'success');
+            }
+        };
+
+        document.getElementById('statement-custom').onclick = async () => {
+            log(`📡 Testing GET /statement/2026/1 (January 2026)`);
+            const result = await getMonthlyStatement(2026, 1);
+            logResponse(`GET /statement/2026/1`, result);
+        };
+
+        // ========== UTILITIES ==========
+        
+        document.getElementById('clear-logs').onclick = () => clearLogs();
+
+        document.getElementById('clean-all-data').onclick = async () => {
+            if (!confirm('⚠️ WARNING: This will delete ALL incomes and expenses for user ' + TEST_USER + '. Continue?')) return;
+            
+            log('🗑️ Cleaning all test data...', 'warning');
+            
+            // Delete all incomes for test user
+            const incomesResult = await getAllIncomes();
+            if (incomesResult.success) {
+                const userIncomes = incomesResult.data.filter(i => i.user === TEST_USER);
+                for (const income of userIncomes) {
+                    await deleteIncome(income._id);
+                    log(`   Deleted income: ${income.description}`);
+                }
+                log(`   ✅ Deleted ${userIncomes.length} incomes`);
+            }
+            
+            // Delete all expenses for test user
+            const expensesResult = await getAllExpenses();
+            if (expensesResult.success) {
+                const userExpenses = expensesResult.data.filter(e => e.user === TEST_USER);
+                for (const expense of userExpenses) {
+                    await deleteExpense(expense._id);
+                    log(`   Deleted expense: ${expense.description}`);
+                }
+                log(`   ✅ Deleted ${userExpenses.length} expenses`);
+            }
+            
+            lastIncomeId = null;
+            lastExpenseId = null;
+            log('✨ All test data cleaned!', 'success');
+        };
+
+        // Run all tests sequentially
+        document.getElementById('run-all-tests').onclick = async () => {
+            log('🚀 Starting full API test sequence...', 'warning');
+            
+            // Income tests
+            await document.getElementById('income-add').click();
+            await new Promise(r => setTimeout(r, 500));
+            await document.getElementById('income-list').click();
+            await new Promise(r => setTimeout(r, 500));
+            await document.getElementById('income-by-month').click();
+            await new Promise(r => setTimeout(r, 500));
+            await document.getElementById('income-by-id').click();
+            await new Promise(r => setTimeout(r, 500));
+            await document.getElementById('income-update').click();
+            await new Promise(r => setTimeout(r, 500));
+            
+            // Expense tests
+            await document.getElementById('expense-add').click();
+            await new Promise(r => setTimeout(r, 500));
+            await document.getElementById('expense-list').click();
+            await new Promise(r => setTimeout(r, 500));
+            await document.getElementById('expense-by-month').click();
+            await new Promise(r => setTimeout(r, 500));
+            await document.getElementById('expense-by-id').click();
+            await new Promise(r => setTimeout(r, 500));
+            await document.getElementById('expense-update').click();
+            await new Promise(r => setTimeout(r, 500));
+            
+            // Statement tests
+            await document.getElementById('statement-current').click();
+            await new Promise(r => setTimeout(r, 500));
+            await document.getElementById('statement-custom').click();
+            
+            log('✨ Full API test sequence completed!', 'success');
+        };
+
+        // Display user name in header
+        document.getElementById('user-name').textContent = TEST_USER;
+        log(`Using consistent user: ${TEST_USER}`);
+    </script>
+</body>
+</html>

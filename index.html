@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Finomic</title>
   <script type="module">
-    import { onAuthChange } from './public/js/firebase/auth.js';
+    import { onAuthChange } from './src/js/firebase/auth.js';
     onAuthChange(user => {
-      window.location.href = user ? './public/dashboard.html' : './public/login.html';
+      window.location.href = user ? './src/dashboard.html' : './src/login.html';
     });
   </script>
 </head>

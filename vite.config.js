@@ -1,28 +1,26 @@
 import { defineConfig } from 'vite';
-
-function forceEnvVariables() {
-  return {
-    name: 'force-env-variables',
-    config() {
-      return {
-        define: {
-          'import.meta.env.VITE_FIREBASE_API_KEY': JSON.stringify(process.env.VITE_FIREBASE_API_KEY),
-          'import.meta.env.VITE_FIREBASE_AUTH_DOMAIN': JSON.stringify(process.env.VITE_FIREBASE_AUTH_DOMAIN),
-          'import.meta.env.VITE_FIREBASE_PROJECT_ID': JSON.stringify(process.env.VITE_FIREBASE_PROJECT_ID),
-          'import.meta.env.VITE_FIREBASE_STORAGE_BUCKET': JSON.stringify(process.env.VITE_FIREBASE_STORAGE_BUCKET),
-          'import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID': JSON.stringify(process.env.VITE_FIREBASE_MESSAGING_SENDER_ID),
-          'import.meta.env.VITE_FIREBASE_APP_ID': JSON.stringify(process.env.VITE_FIREBASE_APP_ID),
-          'import.meta.env.VITE_FIREBASE_MEASUREMENT_ID': JSON.stringify(process.env.VITE_FIREBASE_MEASUREMENT_ID),
-        }
-      };
-    }
-  };
-}
+import { resolve } from 'path';
 
 export default defineConfig({
-  root: 'public',
-  envDir: '../',
-  plugins: [forceEnvVariables()],
+  root: '.',
+  envDir: '.',
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        login: resolve(__dirname, 'src/login.html'),
+        dashboard: resolve(__dirname, 'src/dashboard.html'),
+        transactions: resolve(__dirname, 'src/transactions.html'),
+        categories: resolve(__dirname, 'src/categories.html'),
+        reports: resolve(__dirname, 'src/reports.html'),
+        help: resolve(__dirname, 'src/help.html'),
+        'forgot-password': resolve(__dirname, 'src/forgot-password.html'),
+        'reset-password': resolve(__dirname, 'src/reset-password.html'),
+        'test-api': resolve(__dirname, 'src/test-api.html'),
+      }
+    }
+  },
   server: {
     port: 5173,
     open: true,
